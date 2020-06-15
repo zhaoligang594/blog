@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://v3.bootcss.com/examples/carousel/#about -->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="headerlink">
+</head>
+<body style="background-color: #c2c2c2;">
+<!--用户登陆后展示的首页   -->
+<script type="text/javascript">
+    $(function () {
+        debugger;
+        //document.write(_LoadingHtml);
+        /**
+         * 加入加载信息的图片
+         */
+            // addLoading($("#header_inner_show"));
+            // completeLoading();
+
+            // $.get("/index", function (returnData) {
+            //     completeLoading();
+            //     $("#header_inner_show").html(returnData);
+            // });
+
+            // $(".navbar-head").on("click", null, function () {
+            //     addLoading($("#header_inner_show"));
+            //     var url = $(this).attr("url") + "?token=" + localStorage.getItem("user_token");
+            //     $.get(url, function (returnData) {
+            //         completeLoading();
+            //         if (typeof(returnData) == "object") {
+            //             $("#header_inner_show").html(returnData.data);
+            //         } else {
+            //             $("#header_inner_show").html(returnData);
+            //         }
+            //     });
+            //
+            // });
+
+
+        var projectName = '/';
+        $("#btn-primary-resume").click(function () {
+            alert(1);
+        });
+        $("#btn-primary-bbs").click(function () {
+            window.location.href = 'editBbs';
+        });
+
+        $(".btn-bbs-update").click(function () {
+            window.location.href = 'updateBbs?bbsId='+$(this).attr("bbsId");
+        });
+
+        /**
+         * 刷新发布的缓存
+         */
+        $("#btn-primary-freash").click(function () {
+
+            addLoading($("#header_inner_show"));
+
+
+            var postData = {
+
+            };
+
+            /**
+             * 请求的基本操作
+             */
+            $.post("v1/cache/refresh", postData, function (returnData) {
+                completeLoading();
+                if(returnData.respCode==200){
+                    alert("刷新成功");
+                    window.location.reload();
+                }else {
+                    alert(returnData.data);
+                }
+
+            });
+
+        });
+
+
+
+        /**
+         * 启动小熊
+         */
+        flowjs();
+
+
+    });
+</script>
+
+<div th:include="page-header"></div>
+<div class="container"  style="background-color: #d7ffe3;">
+
+    <div style="clear: both;padding: 5px 10px;">
+        <span class="layui-breadcrumb" lay-separator=" | ">
+          <a href="privateZone">博客维护</a>
+          <a href="bbsZone">论坛文章维护</a>
+    </span>
+    </div>
+
+
+    <!--<div style="clear: both;padding: 5px 10px;">-->
+        <!--<span class="layui-breadcrumb" lay-separator="->">-->
+          <!--<a href="privateZone">博客维护</a>-->
+          <!--<a href="bbsZone">站主博客维护</a>-->
+    <!--</span>-->
+
+    <!--</div>-->
+
+
+    <!--  展示基本的数据  -->
+    <div id="header_inner_show">
+
+
+        <h4>bbs维护-->个人文章管理</h4>
+
+        <!--  上一页  下一页  -->
+        <div class="container" style="clear: both;">
+            <div style="clear: both;">
+                <a class="navbar-head_inner" href="#" role="button" th:href="@{bbsZone(currentPage=${pageInfo.prePage})}">
+                    上一页
+                </a>
+                <a class="navbar-head_inner" href="#" role="button" th:href="@{bbsZone(currentPage=${pageInfo.nextPage})}">
+                    下一页
+                </a>
+                &nbsp;当前第<span th:text="${pageInfo.currentPage}+'页 &nbsp;共'+${pageInfo.pageTotal}+'页'"/>
+            </div>
+        </div>
+
+
+
+        <div style="padding: 15px">
+
+            <h4>文章管理：</h4>
+            <span class="btn btn-primary" id="btn-primary-bbs">新增</span>
+            <span class="btn btn-primary" id="btn-primary-freash">立刻刷新缓存</span>
+
+            <table class="table table-hover" style="text-align: center;">
+                <thead class="table-condensed text-center">
+                <tr>
+                    <td class="text-center">编号</td>
+                    <td class="text-center">标题</td>
+                    <td class="text-center">分类</td>
+                    <td class="text-center">描述</td>
+                    <td class="text-center">操作</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table-condensed text-center" th:each="bbs:${pageInfo.data}">
+                    <td class="text-center"><span th:field="${bbs.bbsId}" th:text="${bbs.bbsId}"/></td>
+                    <td class="text-center"><span th:text="${bbs.bbsTitle}"/></td>
+                    <td class="text-center"><span th:text="${bbs.bbsCategory}"/></td>
+                    <td class="text-center"><span th:text="${bbs.bbsDesc}"/></td>
+                    <td class="text-center"><span class="btn btn-primary btn-bbs-update"  th:attr="bbsId=${bbs.bbsId}">修改</span></td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+
+        <!--  上一页  下一页  -->
+        <div class="container" style="clear: both;">
+            <div style="clear: both;">
+                <a class="navbar-head_inner" href="#" role="button" th:href="@{bbsZone(currentPage=${pageInfo.prePage})}">
+                    上一页
+                </a>
+                <a class="navbar-head_inner" href="#" role="button" th:href="@{bbsZone(currentPage=${pageInfo.nextPage})}">
+                    下一页
+                </a>
+                &nbsp;当前第<span th:text="${pageInfo.currentPage}+'页 &nbsp;共'+${pageInfo.pageTotal}+'页'"/>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="shape circle"></div>
+<div class="shape circle"></div>
+<div class="shape circle"></div>
+<div class="shape rectangle"></div>
+<div class="shape triangle"></div>
+
+<div th:include="monkey"></div>
+<div style="clear: both;height: 300px;">
+
+</div>
+<div class="navbar-fixed-bottom" style="background-color: #8B4726" th:include="bottom">
+    <!--#8B4726-->
+</div>
+</body>
+</html>

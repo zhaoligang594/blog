@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://v3.bootcss.com/examples/carousel/#about -->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="headerlink">
+</head>
+<body style="background-color: white;">
+
+<!--echarts-->
+<script src="https://cdn.bootcss.com/echarts/4.3.0-rc.1/echarts.min.js"></script>
+<!--<script type="text/javascript" src="/echarts/echarts.min.js"></script>-->
+<script type="text/javascript" src="/echarts/map/js/china.js"></script>
+<!--日常杂论的首页   -->
+<script type="text/javascript">
+    $(function () {
+
+        var project_localtion = window.location.href;
+
+        /*  首页  */
+
+        if (project_localtion.indexOf("projects") >= 0) {
+            $("#header_projects").css({"color":"red"});
+        }
+
+        /**
+         * 启动小熊
+         */
+        flowjs();
+
+
+        /**
+         * 播放音乐
+         */
+        $("#id_time_link_about_daily_tart").click(function () {
+            debugger;
+            $("#img_timeline_daily").show();
+            var player = $("#time_link_about_daily")[0];
+            player.play();
+        });
+
+        $("#id_time_link_about_daily_abort").click(function () {
+            debugger;
+            $("#img_timeline_daily").hide();
+            var player = $("#time_link_about_daily")[0];
+            player.pause();
+        });
+
+        // layui.use(['element','layer'], function() {
+        //     var element = layui.element;
+        //     var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+        //     layer.open({
+        //         type: 1,
+        //         title: false,
+        //         closeBtn: 0,
+        //         area: '516px',
+        //         skin: 'layui-layer-nobg', //没有背景色
+        //         shadeClose: true,
+        //         content: ''
+        // });
+        // });
+
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main1'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '某季度商品的销售量'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                data: ['销量']
+            },
+            xAxis: {
+                data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+            },
+            yAxis: {},
+            series: [{
+                name: '销量',
+                type: 'bar',
+                data: [5, 20, 36, 10, 10, 20]
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart2 = echarts.init(document.getElementById('main2'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '某季度商品的销售量'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            series: [{
+                name: '销量',
+                type: 'pie',
+                data: [
+                    {name: '衬衫', value: 5},
+                    {name: '羊毛衫', value: 20},
+                    {name: '雪纺衫', value: 36},
+                    {name: '裤子', value: 10},
+                    {name: '高跟鞋', value: 10},
+                    {name: '袜子', value: 20}
+                ]
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart2.setOption(option);
+
+
+        /*  main3   */
+
+        var symbolSize = 20;
+        var data = [[15, 0], [-50, 10], [-56.5, 20], [-46.5, 30], [-22.1, 40]];
+
+        var myChart3 = echarts.init(document.getElementById('main3'));
+
+        myChart3.setOption({
+            tooltip: {
+                padding: 0,
+                backgroundColor: 'transparent',
+                triggerOn: 'none',
+                formatter: function (params) {
+
+                    return 'X: ' + params.data[0].toFixed(2) + '<br>Y: ' + params.data[1].toFixed(2);
+                }
+            },
+            xAxis: {
+                min: -80,
+                max: 80,
+                type: 'value',
+                axisLine: {onZero: false}
+            },
+            yAxis: {
+                min: -30,
+                max: 100,
+                type: 'value',
+                axisLine: {onZero: false}
+            },
+            series: [
+                {
+                    id: 'a',
+                    type: 'line',
+                    smooth: true,
+                    symbolSize: symbolSize,
+                    data: data
+                }
+            ],
+        });
+
+        myChart3.setOption({
+            graphic: echarts.util.map(data, function (item, dataIndex) {
+                return {
+                    type: 'circle',
+                    position: myChart3.convertToPixel('grid', item),
+                    shape: {
+                        r: symbolSize / 2
+                    },
+                    invisible: true,
+                    draggable: true,
+                    ondrag: echarts.util.curry(onPointDragging, dataIndex),
+                    onmousemove: echarts.util.curry(showTooltip, dataIndex),
+                    onmouseout: echarts.util.curry(hideTooltip, dataIndex),
+                    z: 100
+                };
+            })
+        });
+
+        window.addEventListener('resize', function () {
+            myChart3.setOption({
+                graphic: echarts.util.map(data, function (item, dataIndex) {
+                    return {
+                        position: myChart3.convertToPixel('grid', item)
+                    };
+                })
+            });
+        });
+
+        function showTooltip(dataIndex) {
+            myChart3.dispatchAction({
+                type: 'showTip',
+                seriesIndex: 0,
+                dataIndex: dataIndex
+            });
+        }
+
+        function hideTooltip(dataIndex) {
+            myChart3.dispatchAction({
+                type: 'hideTip'
+            });
+        }
+
+        function onPointDragging(dataIndex, dx, dy) {
+            data[dataIndex] = myChart3.convertFromPixel('grid', this.position);
+            myChart3.setOption({
+                series: [{
+                    id: 'a',
+                    data: data
+                }]
+            });
+        }
+
+
+        /*   China  */
+
+        function randomData() {
+            return Math.round(Math.random() * 500);
+        }
+
+
+        var mydata = [
+            {name: '北京', value: '100'}, {name: '天津', value: randomData()},
+            {name: '上海', value: randomData()}, {name: '重庆', value: randomData()},
+            {name: '河北', value: randomData()}, {name: '河南', value: randomData()},
+            {name: '云南', value: randomData()}, {name: '辽宁', value: randomData()},
+            {name: '黑龙江', value: randomData()}, {name: '湖南', value: randomData()},
+            {name: '安徽', value: randomData()}, {name: '山东', value: randomData()},
+            {name: '新疆', value: randomData()}, {name: '江苏', value: randomData()},
+            {name: '浙江', value: randomData()}, {name: '江西', value: randomData()},
+            {name: '湖北', value: randomData()}, {name: '广西', value: randomData()},
+            {name: '甘肃', value: randomData()}, {name: '山西', value: randomData()},
+            {name: '内蒙古', value: randomData()}, {name: '陕西', value: randomData()},
+            {name: '吉林', value: randomData()}, {name: '福建', value: randomData()},
+            {name: '贵州', value: randomData()}, {name: '广东', value: randomData()},
+            {name: '青海', value: randomData()}, {name: '西藏', value: randomData()},
+            {name: '四川', value: randomData()}, {name: '宁夏', value: randomData()},
+            {name: '海南', value: randomData()}, {name: '台湾', value: randomData()},
+            {name: '香港', value: randomData()}, {name: '澳门', value: randomData()}
+        ];
+
+
+        var optionMap1 = {
+            backgroundColor: '#FFFFFF',
+            title: {
+                text: '全国的降雨量示意图',
+                subtext: '每个省份的降雨量',
+                x: 'center'
+            },
+            tooltip: {
+                //trigger: 'item'
+                padding: 0,
+                backgroundColor: 'transparent',
+                formatter: function (params) {
+
+                    return '<table style="background-color: black;opacity: 0.7;border: 1px solid;text-align: center">' +
+                        '<thead>' +
+                        '<tr>' +
+                        '<th width="50">区域（省份）</th>' +
+                        '<th width="50">降雨量（毫米）</th>' +
+                        '</tr>' +
+                        '</thead>' +
+                        '<tbody>' +
+                        '<tr>' +
+                        '<th>' + params.data.name + '</th>' +
+                        '<th>' + params.data.value + '</th>' +
+                        '</tr>' +
+                        '</tbody>' +
+                        '</table>';
+                }
+            },
+
+            //左侧小导航图标
+            visualMap: {
+                show: true,
+                x: 'left',
+                y: 'center',
+                // calculable:true,//是否显示拖拽用的手柄（手柄能拖拽调整选中范围）
+                // realtime:true, //拖拽时，是否实时更新
+                // text:['降雨量（单位：毫米）', ''],
+                splitList: [
+                    {start: 500, end: 600}, {start: 400, end: 500},
+                    {start: 300, end: 400}, {start: 200, end: 300},
+                    {start: 100, end: 200}, {start: 0, end: 100},
+                ],
+                color: ['#5475f5', '#9feaa5', '#85daef', '#74e2ca', '#e6ac53', '#9fb5ea']
+            },
+
+            //配置属性
+            series: [{
+                name: '数据',
+                type: 'map',
+                mapType: 'china',
+                roam: true,
+                label: {
+                    normal: {
+                        show: true, //省份名称
+                        formatter: function (params) {
+                            if (null != params.data || undefined != params.data || 'undefined' != params.data) {
+                                var name = params.data.name;
+                                var value = params.data.value;
+                                return name + ':' + value;
+                            } else {
+                                return '暂无数据';
+                            }
+                        },
+                        position: 'inside',
+                        backgroundColor: '#fff',
+                        padding: [4, 5],
+                        borderWidth: 1,
+                        borderRadius: 3,
+                        borderColor: 'rgba(0,0,0,0.5)',
+                        color: '#777',
+                        rich: {
+                            valueUp: {
+                                color: '#019D2D',
+                                fontSize: 14
+                            },
+                            valueDown: {
+                                color: 'red',
+                                fontSize: 14
+                            }
+                        }
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                data: mydata  //数据
+            }]
+        };
+        //初始化echarts实例
+        var myChart4 = echarts.init(document.getElementById('main4'));
+
+        //使用制定的配置项和数据显示图表
+        myChart4.setOption(optionMap1);
+
+
+    });
+
+</script>
+<style>
+    .text_left {
+        text-align: left;
+        font-size: 18px;
+    }
+
+    .text_left p {
+        padding: 5px;
+        line-height: 28px;
+        color: #6b6e07;
+    }
+
+    .text_left img {
+        width: 120px;
+        height: 120px;
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .container hr {
+        margin: 0px;
+        padding: 0px;
+    }
+</style>
+<div th:include="page-header-main"></div>
+<div class="container">
+    <!--  展示基本的数据  -->
+    <div class="text-center" style="padding: 15px;">
+        <h2 style="font-size: 24px;padding: 15px;font-weight: bold;color: rgb(42,161,252)">
+            项目展示
+        </h2>
+        <div class="text_left">
+            <p style="color: #ff3b7b;">
+                项目一: 日常杂论App
+            </p>
+            <p>
+                日常杂论App是一个自己开发的App,包含发表文章，发表个人日常信息，注册，微信快捷登录， 添加好友，实时聊天等基本功能。数据库采用mysql数据库，服务器是阿里云的服务器，采用Springboot
+                ,MyBatis来实现后台的基本的操作逻辑，应用Netty来实现用户与好友的实时交流。亮点， 实现了一个简单的富文本的编辑器，实时与好友聊天。
+            </p>
+        </div>
+        <div class="text_left">
+            <p style="color: #ff3b7b;">
+                项⽬二: 新安左右贷
+            </p>
+            <p>
+                左右贷公司是安徽新安金融集团旗下品牌企业，是一家专注于安徽P2P服务的公司，总部设在合 肥。左右贷致力于建立诚信、安全、便捷、互惠的专业服务平台，注于对中小微企业及个人融资提供
+                服务的互联网金融信息中介服务机构，“新安左右贷”就是该P2P平台。主要采用netty,spring,mysql,dubbo等技术，本人主要开发任务是对接银行接又，融资扣款，下载操作流水文件。所有上传下载文件需要用的是文件的统一的格式，采用Java里面的反射技术以及注解来进行对实体类
+                的List进行文件转化以及文件转换成实体类对象。编写了模拟银行的mock。协助开发账户账务系统。
+            </p>
+        </div>
+        <div class="text_left">
+            <p style="color: #ff3b7b;">
+                项⽬三: 商誉赊
+            </p>
+            <p>
+                商誉赊是一个B2B(Business-to-Business)的新型的互联网的金融模式，服务于B2B电商及传统核 心企业快速解决中小微企业融资难题，企业用户可以通过商誉赊来借贷来进行购买东西。企业可以通
+                过该平台进行注册，机器审核通过后，可以使用改可使用的借贷金额购买东西以及还款的操作。该系 统的用户主要有企业用户、资金方、电商三方面的用户。主要负责开发企业以及电商用户的基本工
+                作。具体的内容有:进件的机器审核(机审系统—主要对接:数据宝/智诚阿福/中诚信/百度金融)，
+                企业用户注册以及对接第三方支付公司(国付宝)接又-设计操作流程以及编码工作，对接阿里云的OSS基本上传文件和下载文件的接又，第一版本的部署工作。所有请求的接又都是rest的形式，而且
+                对接又的访问是可以配置的，保证了不同的用户看到和使用的是不同的信息与功能。
+            </p>
+        </div>
+        <div class="text_left">
+            <p style="color: #ff3b7b;">
+                项目四: 广东省食品安全风险监测信息管理系统
+            </p>
+            <p>
+                项目是由广东省食品安全中心发起，主要是对全国食品的微生物与污染物进行监测、检测、审核 与将结果上报国家具体流程。方便地市对国家食品安全的监测，使的国家每年的食品的监测任务更加
+                的有序进行。该项目属于传统的ANT项目结构，使用Struts2+SpringMVC+Hibernate等框架开发的项
+                目。用jxl进行报表，用WebService将需要上报国家的数据进行提交的接又。基本上大多数的请求都是 运用Ajax与后台进行交互。前台为公司自己做的EasyUI、数据有Oracle用进行存储。
+            </p>
+        </div>
+        <div class="text_left">
+            <p style="color: #ff3b7b;">
+                项目五: Java⾼并发秒杀模块
+            </p>
+            <p>
+                项目是在是我们公司在一个项目中的模块，该模块的需求是在一个特定的环境，大量的用户去秒 杀多件商品，涉及到如何进行控制事务，如何进行秒杀以及提高秒杀的性能，进而如何进行优化数据
+                库、sql语句，优化缓存并提高并发性。用分布式解决大量用户在很小的时间内进行秒杀商品。
+            </p>
+        </div>
+        <div class="text_left">
+            <p style="color: #ff3b7b;">
+                项目六: 历史数据迁移
+            </p>
+            <p>
+                国家的污染物的样本与检测数据的历史数据进行迁移，以便我们进行统计分析。样本数量超过7万 条数据，检测数据，超过64万条，处理过程采用分批次的处理形式，以及在处理程序的执行中发生错
+                误的处理。由于国家的表结构与我们的表结构不一致，所以，在程序处理的过程中，还要对国家的污 染物数据结构形式进行转化，以达到我们想要得到结果的数据格式。
+            </p>
+        </div>
+    </div>
+
+    <hr/>
+
+    <hr/>
+
+
+    <div class="text-center" style="padding: 15px;">
+        <h2 style="font-size: 24px;padding: 15px;font-weight: bold;color: rgb(42,161,252)">
+            图表展示
+        </h2>
+        <div class="text_left">
+            <div id="main1" style="width: 1000px;height:600px;"></div>
+            <div id="main2" style="width: 1000px;height:600px;"></div>
+            <div id="main3" style="width: 1000px;height:600px;"></div>
+            <div id="main4" style="width: 1000px;height:600px;"></div>
+        </div>
+    </div>
+
+    <div class="text-center" style="padding: 15px;">
+        <h2 style="font-size: 24px;padding: 15px;font-weight: bold;color: rgb(42,161,252)">
+            **项目合作**
+        </h2>
+        <div class="text_left">
+            <p>项目合作，有意者联系我的微信，具体的内容详谈</p>
+            <img src="https://blogjs.oss-cn-beijing.aliyuncs.com/qr/21566889848_.pic_hd.jpg">
+            <span>👈扫一扫，添加我的微信</span>
+            <a href="/projects">作品展示</a>
+        </div>
+    </div>
+
+</div>
+
+
+<div th:include="monkey"></div>
+<!--<div style="clear: both;height: 300px;">-->
+
+<!--</div>-->
+<div  style="background-color: #8B4726" th:include="bottom">
+    <!--#8B4726-->
+</div>
+</body>
+</html>

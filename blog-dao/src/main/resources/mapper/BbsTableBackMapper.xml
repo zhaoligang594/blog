@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.breakpoint.dao.BbsTableMapper">
+  <!--bbs 的基本操作-->
+
+  <select id="selectByBbsId" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List"/>
+    ,
+    <include refid="Blob_Column_List"/>
+    from bbs_table
+    where bbs_id = #{bbsId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectNextBbs" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List"/>
+    ,
+    <include refid="Blob_Column_List"/>
+    from bbs_table
+    where gmt_create <![CDATA[ < ]]> #{bbsTable.gmtCreate}
+    and bbs_id=(select max(bbs_id) from bbs_table where gmt_create <![CDATA[ < ]]> #{bbsTable.gmtCreate})
+
+  </select>
+  <select id="selectPreBbs" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List"/>
+    ,
+    <include refid="Blob_Column_List"/>
+    from bbs_table
+    where gmt_create <![CDATA[ > ]]> #{bbsTable.gmtCreate}
+    and bbs_id=(select min(bbs_id) from bbs_table where gmt_create <![CDATA[ > ]]> #{bbsTable.gmtCreate})
+
+  </select>
+
+  <select id="selectBbsByPageInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+
+    from bbs_table
+    <where>
+      <trim prefix="and" prefixOverrides="and">
+        <if test="null!=userId">
+          and user_id=#{userId}
+        </if>
+        <if test="null!=bbsType">
+          and bbs_category=#{bbsType}
+        </if>
+      </trim>
+    </where>
+    order by gmt_modified desc
+    limit #{pageStart},#{pageSize}
+  </select>
+
+  <select id="countBbsByPageInfo" resultType="int">
+    select count(bbs_id)
+    from bbs_table
+    <where>
+      <trim prefix="and" prefixOverrides="and">
+        <if test="null!=userId">
+          and user_id=#{userId}
+        </if>
+        <if test="null!=bbsType">
+          and bbs_category=#{bbsType}
+        </if>
+      </trim>
+    </where>
+  </select>
+
+</mapper>

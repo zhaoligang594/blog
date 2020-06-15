@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://v3.bootcss.com/examples/carousel/#about -->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="headerlink">
+</head>
+<!--<body style="background-color: #c2c2c2;">-->
+<body style="background-color: white;">
+<!--BBS管理   -->
+<script type="text/javascript">
+
+
+    $(function () {
+        //document.write(_LoadingHtml);
+        /**
+         * 加入加载信息的图片
+         */
+
+
+        var projectName = '/';
+        $("#btn-primary-resume").click(function () {
+            alert(1);
+        });
+        $("#btn-primary-topic").click(function () {
+            window.location.href = 'edittopic';
+        });
+
+        $(".btn-topic-update").click(function () {
+            window.location.href = 'updatetopic?topicId=' + $(this).attr("topicId");
+        });
+
+        /**
+         * 刷新发布的缓存
+         */
+        $("#btn-primary-freash").click(function () {
+
+            addLoading($("#header_inner_show"));
+
+
+            var postData = {};
+
+            /**
+             * 请求的基本操作
+             */
+            $.post("v1/cache/refresh", postData, function (returnData) {
+                completeLoading();
+                if (returnData.respCode == 200) {
+                    alert("刷新成功");
+                    window.location.reload();
+                } else {
+                    alert(returnData.data);
+                }
+
+            });
+
+        });
+
+
+        /**
+         * 启动小熊
+         */
+        flowjs();
+
+
+    });
+
+
+    layui.use(['layer', 'table'], function () { //独立版的layer无需执行这一句
+        var $ = layui.jquery, layer = layui.layer, table = layui.table; //独立版的layer无需执行这一句
+
+    });
+
+
+</script>
+
+<div th:include="page-header-main"></div>
+
+<div class="container" style="width: 80%;">
+
+    <!--<div style="clear: both;padding: 5px 10px;">-->
+    <!--<span class="layui-breadcrumb" lay-separator=" | ">-->
+    <!--<a href="privateZone">博客维护</a>-->
+    <!--<a href="bbsZone">论坛文章维护</a>-->
+    <!--</span>-->
+    <!--</div>-->
+
+
+    <!--<div style="clear: both;padding: 5px 10px;">-->
+    <!--<span class="layui-breadcrumb" lay-separator="->">-->
+    <!--<a href="privateZone">博客维护</a>-->
+    <!--<a href="bbsZone">站主博客维护</a>-->
+    <!--</span>-->
+
+    <!--</div>-->
+    <!--  展示基本的数据  -->
+    <div id="header_inner_show">
+
+
+        <div class="layui-row">
+            <div class="layui-col-md2">
+                <div th:include="private_left_tree"></div>
+            </div>
+            <div class="layui-col-md10" style="padding: 20px">
+                <div style="padding: 5px 15px">
+                    <span class="layui-breadcrumb">
+                        <a href="javaScript:;">管理员设置</a>
+                        <a href="javaScript:;">设置</a>
+                    </span>
+                </div>
+
+                <div class="text-center">
+                    <h1>管理员设置</h1>
+
+                </div>
+                <span class="btn btn-primary" id="btn-primary-topic">新增</span>
+                <span class="btn btn-primary" id="btn-primary-freash">立刻刷新缓存</span>
+                <div style="padding: 15px">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:include="monkey"></div>
+
+<div  style="background-color: #8B4726" th:include="bottom">
+    <!--#8B4726-->
+</div>
+</body>
+</html>

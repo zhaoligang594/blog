@@ -1,0 +1,386 @@
+<style>
+    .layui-nav-item-class {
+        /*height: 100%;*/
+        /*!*width: 120px;*!*/
+        /*!*margin-left: 15px;*!*/
+        /*font-size: 24px;*/
+
+    }
+
+    .layui-nav-item-class :hover {
+        font-size: 29px !important;
+        /*border: 1px dotted grey;*/
+    }
+
+    .layui-nav-item-header {
+        cursor: pointer;
+        color: orange;
+        font-size: 24px;
+        font-family: 'Times New Roman';
+        float: left;
+        line-height: 60px;
+    }
+
+    .layui-nav-item-header :hover {
+        color: #ff6318;
+        /*font-size: 24px;*/
+        /*word-spacing: 24px;*/
+    }
+
+    .header {
+        /*left: 250px;*/
+        height: 60px;
+        line-height: 60px;
+    }
+
+    .navbar-inner-message {
+        /*font-size: 24px;*/
+        line-height: 26px;
+        font-family: 'Consolas';
+        text-align: center;
+        background: #faf8fb;
+        margin: 0 auto;
+        /*width: 825pt;*/
+        height: 26px;
+    }
+
+    .navbar-inner-message :hover {
+        color: #999;
+        opacity: 0.5;
+        cursor: pointer;
+    }
+
+    body{
+        background: #faf8fb!important;
+    }
+
+    .content-text {
+        padding: 10px;
+        background: #fff;
+        margin-bottom: 26px!important;
+    }
+
+
+    .img {
+        width: 200px;
+        height: 123px;
+        margin: 5px auto;
+    }
+
+    .item-cont {
+        padding: 15px;
+    }
+
+    .item-cont h3 span {
+        font-size: 24px;
+        margin: 20px 0;
+    }
+
+    .item-cont h5 {
+        font-size: 12px;
+        color: #ff7f21;
+        margin-bottom: 32px;
+    }
+
+    .item-cont p {
+        line-height: 37px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+    }
+
+    .new-icon {
+        width: 36px;
+        height: 18px;
+        line-height: 18px;
+        text-align: center;
+        padding: 0;
+        margin: -3px 0 0 10px;
+    }
+
+    .list-item {
+        margin: 25px 0px;
+    }
+
+    .content-text {
+        padding: 10px;
+        background: #fff;
+    }
+
+    .item-items {
+        float: left;
+        height: 28px;
+        line-height: 28px;
+        margin-left: 5px;
+        padding: 3px;
+        color: orange;
+        cursor: pointer;
+    }
+
+    .label {
+        position: relative;
+        display: inline-block;
+        padding: 4px 6px 3px;
+        line-height: 14px;
+        /* color: #fff; */
+        vertical-align: baseline;
+        white-space: nowrap;
+        background-color: #999;
+    }
+
+    .label-arrow {
+        position: absolute;
+        width: 0;
+        height: 0;
+        vertical-align: top;
+        content: "";
+    }
+
+    .label-arrow {
+        border-left-color: #d9534f;
+    }
+
+    .label-important {
+        background-color: #d9534f;
+    }
+
+    .label .label-arrow {
+        top: 7px;
+        right: -4px;
+        border-left: 4px solid #d9534f;
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+    }
+
+    .layui-row .lay-row-span {
+        font-size: 24px;
+    }
+
+    /*.layui-breadcrumb a{*/
+    /*cursor: pointer;*/
+    /*}*/
+
+    .item {
+        margin-top: 26px;
+    }
+
+</style>
+
+<div style="position: relative; top: 0px;width: 100%;text-align: right;z-index: 11" class="header" id="navbar">
+
+    <div class="navbar-inner-message" id="navbar-inner">
+        <!--<img src="/image/header2.png" style="border-radius: 30px;">-->
+        <marquee  behavior="alternate">欢迎来到赵先生的博客</marquee>
+    </div>
+    <ul class="layui-nav" style="background-color: #FFFFFF!important;z-index: 900;box-shadow: 2px 2px 2px #888888;" lay-filter="">
+        <!--<li class="layui-nav-item"><a href="">日常杂论</a></li>-->
+        <!--<li class="layui-nav-item layui-this"><a href="">产品</a></li>-->
+        <li class="layui-nav-item layui-nav-item-header"
+            style="">
+            <!--<img src="/images/header_span.png" width="140" height="60">-->
+            Mr. Zhao Blog
+            <small>Aspire to Inspire Until I Expire</small>
+        </li>
+        <li class="layui-nav-item layui-nav-item-class"><a href="/main" id="header_main">首页</a></li>
+        <li class="layui-nav-item layui-nav-item-class"><a href="/index" id="header_index">技术杂谈</a></li>
+        <li class="layui-nav-item layui-nav-item-class"><a href="/album" id="header_album">相册</a></li>
+        <!--<li class="layui-nav-item layui-nav-item-class"><a href="/lifeTime" id="header_lifeTime">生活杂论</a></li>-->
+        <!--<li class="layui-nav-item"><a href="bbs">论坛</a></li>-->
+        <!--<li class="layui-nav-item">-->
+        <!--<a href="javascript:;">外站</a>-->
+        <!--<dl class="layui-nav-child"> &lt;!&ndash; 二级菜单 &ndash;&gt;-->
+        <!--<dd><a href="http://blog.csdn.net/zhaoligang1234?viewmode=contents" target="_blank">CSDN</a></dd>-->
+        <!--<dd><a href="https://github.com/FREEZINGPOINT" target="_blank">GITHUB</a></dd>-->
+        <!--<dd><a href="#" >...</a></dd>-->
+        <!--</dl>-->
+        <!--</li>-->
+
+        <!--<li class="layui-nav-item"><a href="/youhuijuan" id="header_youhuijuan">淘宝优惠卷</a></li>-->
+
+        <!--<li class="layui-nav-item"><a href="/projects" id="header_projects">作品展示</a></li>-->
+
+        <!--<li class="layui-nav-item layui-nav-item-class"><a href="/tags" id="header_tags">标签</a></li>-->
+        <!--<li class="layui-nav-item layui-nav-item-class"><a href="/archives" id="header_archives">归档</a></li>-->
+        <li class="layui-nav-item layui-nav-item-class"><a href="/touchMe" id="header_touchMe">关于我</a></li>
+        <li class="layui-nav-item layui-nav-item-class"><a href="/timeLink" id="header_timeLink">关于本站</a></li>
+        <li class="layui-nav-item layui-nav-item-class"><a href="/liuyan" id="header_liuyan">给我留言</a></li>
+        <!--<li class="layui-nav-item"><a href="/signin" id="header_signin">用户登陆</a></li>-->
+
+
+    </ul>
+
+    <script>
+        //注意：导航 依赖 element 模块，否则无法进行功能性操作
+
+        $(function () {
+
+            $(window).scroll(function () {
+                //为了保证兼容性，这里取两个值，哪个有值取哪一个
+                //scrollTop就是触发滚轮事件时滚轮的高度
+                var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                console.log("滚动距离" + scrollTop);
+                if (scrollTop >= 26) {
+                    $('#navbar').css({'position': 'fixed', 'top': '0px'});
+                    $('#navbar-inner').hide();
+                }
+                if (scrollTop < 26) {
+                    $('#navbar').css({'position': 'relative', 'top': '0px'});
+                    $('#navbar-inner').show();
+                }
+            });
+
+
+            layui.use(['util', "layer"], function () {
+                var util = layui.util, layer = layui.layer;
+
+                //执行
+                util.fixbar({
+                    bar1: true
+                    , click: function (type) {
+                        console.log(type);
+                        if (type === 'bar1') {
+
+                            layer.msg('恭喜你，发现了新的功能', {icon: 6});
+                            //alert('点击了bar1')
+                        }
+                    }
+                });
+            });
+
+
+            var project_localtion = window.location.href;
+
+            /*  首页  */
+
+            if (project_localtion.indexOf("tags") >= 0) {
+                $("#header_tags").css({"color": "orange"});
+            }
+
+            if (project_localtion.indexOf("album") >= 0) {
+                $("#header_album").css({"color": "orange"});
+            }
+
+            if (project_localtion.indexOf("archives") >= 0) {
+                $("#header_archives").css({"color": "orange"});
+            }
+
+
+            if (project_localtion.indexOf("projects") >= 0) {
+                $("#header_projects").css({"color": "orange"});
+            }
+
+
+            if (project_localtion.indexOf("main") >= 0) {
+                $("#header_main").css({"color": "orange"});
+            }
+
+            if (project_localtion.indexOf("lifeTime") >= 0) {
+                $("#header_lifeTime").css({"color": "orange"});
+            }
+
+            if (project_localtion.indexOf("index") >= 0) {
+                $("#header_index").css({"color": "orange"});
+            }
+
+            if (project_localtion.indexOf("youhuijuan") >= 0) {
+                $("#header_youhuijuan").css({"color": "orange"});
+            }
+
+            if (project_localtion.indexOf("liuyan") >= 0) {
+                $("#header_liuyan").css({"color": "orange"});
+            }
+
+            if (project_localtion.indexOf("signin") >= 0) {
+                $("#header_signin").css({"color": "orange"});
+            }
+
+            if (project_localtion.indexOf("timeLink") >= 0) {
+                $("#header_timeLink").css({"color": "orange"});
+            }
+
+            if (project_localtion.indexOf("touchMe") >= 0) {
+                $("#header_touchMe").css({"color": "orange"});
+            }
+
+
+            // mouseover(function (event) {
+            //
+            // }).mouseout(function (event) {
+            //     alert("456");
+            // });
+
+
+            layui.use(['element', 'layer'], function () {
+                var element = layui.element;
+                var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+                /*  登陆页的操作  */
+                $("#page_user_login").click(function () {
+
+                    /**
+                     * 先判断是否登陆了  之后在进行打开登陆页
+                     */
+
+                    layer.open({
+                        type: 2,
+                        title: '用户登陆页面',
+                        shadeClose: true,
+                        shade: false,
+                        maxmin: false, //开启最大化最小化按钮
+                        area: ['893px', '600px'],
+                        content: ['/signin_alert/', 'no']
+                    });
+                });
+
+
+                //…
+                $("#blog_alert_img").click(function () {
+                    layer.open({
+                        type: 1
+                        ,
+                        title: false //不显示标题栏
+                        ,
+                        closeBtn: false
+                        ,
+                        area: '300px;'
+                        ,
+                        shade: 0.8
+                        ,
+                        id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                        ,
+                        btn: ['朕知道啦！！！']
+                        ,
+                        btnAlign: 'c'
+                        ,
+                        moveType: 1 //拖拽模式，0或者1
+                        ,
+                        content: '<div style="padding: 50px; line-height: 22px; background-color: #fff!important;">' +
+                        '亲！欢迎访问日常杂论网站<br>该网站技术支持--Leo Zhao<br>' +
+                        '<br>日常杂论网站的主题是站主发表一些平时的日常学习过程中或者生活中有趣有意义的文章<br>' +
+                        '<br>该网站还支持网站的留言功能，如果有任何疑问或者想进一步交流请联系我</div>'
+                        ,
+                        success: function (layero) {
+                            // var btn = layero.find('.layui-layer-btn');
+                            // btn.find('.layui-layer-btn0').attr({
+                            //     href: 'http://www.layui.com/'
+                            //     ,target: '_blank'
+                            // });
+                        }
+                    });
+                });
+
+
+            });
+        });
+
+    </script>
+
+
+</div>
+<div style="clear: both;height: 60px;"></div>
+<div class="inner_zlg_container"
+     style="width: 60px;height: 60px;position: fixed;right: 30px;top: 90px;float: right;z-index: 10;">
+    <img id="blog_alert_img" src="/images/alert_blog.png"></a>
+</div>

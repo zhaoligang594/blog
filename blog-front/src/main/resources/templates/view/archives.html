@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://v3.bootcss.com/examples/carousel/#about -->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="headerlink">
+</head>
+<body style="background-color: white;">
+<!--echarts-->
+<script src="https://cdn.bootcss.com/echarts/4.3.0-rc.1/echarts.min.js"></script>
+
+<!--日常杂论的首页   -->
+<script type="text/javascript">
+    $(function () {
+        /**
+         * 启动小熊
+         */
+        flowjs();
+
+        // layui.use(['element','layer'], function() {
+        //     var element = layui.element;
+        //     var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+        //     layer.open({
+        //         type: 1,
+        //         title: false,
+        //         closeBtn: 0,
+        //         area: '516px',
+        //         skin: 'layui-layer-nobg', //没有背景色
+        //         shadeClose: true,
+        //         content: ''
+        // });
+        // });
+
+        var $_archives = $("#author-archives");
+
+        $.get("/blog/v1/topic/getAllTopicType", function (returnData) {
+            debugger;
+            if (returnData.respCode == 200) {
+                var array = returnData.data;
+                for (var i = 0; i < array.length; i++) {
+                    var $_item = $("<a href=\"/index?topicType=" + array[i].topicType + "\" target='_blank'>" + array[i].topicType + "(" + array[i].countNumber + ")</a>");
+                    $($_archives).append($_item);
+                }
+
+            } else {
+                $($_archives).html("<span>对不起，没有更多的数据</span>");
+            }
+
+        });
+
+    });
+
+</script>
+<style>
+    .text_left {
+        text-align: left;
+        font-size: 18px;
+    }
+
+    .text_left p {
+        padding: 5px;
+        line-height: 28px;
+        color: #6e3b1f;
+    }
+
+    .text_left img {
+        width: 120px;
+        height: 120px;
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .container hr {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .author-avater {
+        border-radius: 50%;
+    }
+
+    .author-name {
+        font-size: 24px
+    }
+
+    .author-work {
+        font-size: 16px;
+    }
+
+    .author-location {
+        color: #999;
+        font-size: 14px;
+    }
+
+    .vm {
+        vertical-align: middle;
+    }
+
+    .author-outer {
+        /*position: relative;*/
+        /*top: 50%;*/
+        margin-top: 100px;
+        line-height: 35px;
+        text-align: center;
+        width: 100%;
+        color: #333;
+    }
+
+    .author-outer a {
+        cursor: pointer;
+        font-size: 18px;
+        text-decoration: none;
+        color: orange;
+        margin: 5px 5px;
+        padding: 3px;
+    }
+
+    .author-outer a:hover {
+
+        font-size: 25px;
+        text-decoration: none;
+        color: #ff713f;
+        margin: 5px 5px;
+        padding: 3px;
+    }
+
+    .author-outer span {
+        font-size: 20px;
+        text-align: center;
+        margin: 5px auto;
+        padding: 10px;
+        color: #ff5f17;
+    }
+
+    .author-threads {
+        font-size: 24px;
+    }
+
+    .thread-item {
+        width: 30px;
+        height: 30px;
+        display: inline-block;
+        margin: 0 18px;
+        color: #999;
+        -webkit-transition: color 0.3s ease;
+        -o-transition: color 0.3s ease;
+        transition: color 0.3s ease;
+    }
+
+    .author-icon {
+        width: 25px;
+        height: 25px;
+    }
+
+    .author-tags {
+        text-align: center;
+        line-height: inherit;
+    }
+
+    .author-tags h2 {
+        margin: 10px 5px;
+        font-size: 24px;
+        color: #13227a;
+    }
+
+    .author-tags-items {
+        font-size: 18px;
+        line-height: 18px;
+        margin-top: 5px;
+        padding: 5px;
+    }
+
+    .author-tags-items span {
+        /*width: 18px;*/
+        /*height: 18px;*/
+        margin: 10px 10px;
+        padding: 5px;
+        font-size: 18px;
+    }
+
+    /*.text-center img{*/
+        /*width: 500px;*/
+        /*height: 900px;*/
+    /*}*/
+
+    .addition-message{
+        border: 1px dotted #a5a5a5;
+        font-size: 18px;
+        padding: 15px;
+        border-radius: 50px;
+    }
+
+    .addition-message div{
+        background-color: gainsboro;
+        margin: 20px;
+        border: 1px dotted grey;
+        padding: 5px;
+    }
+
+    .addition-message img{
+        margin: 25px;
+        width: 80%;
+    }
+</style>
+<div th:include="page-header-main"></div>
+<div class="container" style="margin-top: 30px;border-radius: 30px;">
+    <!--  展示基本的数据  -->
+
+    <div class="text-center" style="padding: 15px;">
+
+        <div class="author-outer" id="author-archives">
+
+            <!--<a href="#">JAVA(3)</a>-->
+            <!--<span>对不起，没有更多的数据</span>-->
+
+            <!--<div style="width: 30%;float: left;">-->
+
+
+            <!--</div>-->
+            <!--<div style="width: 70%;float: left;">-->
+
+
+            <!--</div>-->
+
+        </div>
+
+        <div class="addition-message">
+            <!--<div>-->
+                <!--博主寄语：-->
+            <!--</div>-->
+            <img src="/image/21577931532_.pic.jpg">
+        </div>
+    </div>
+
+</div>
+
+
+</div>
+
+<div th:include="monkey"></div>
+<div style="background-color: #8B4726" th:include="bottom">
+    <!--#8B4726-->
+</div>
+</body>
+</html>

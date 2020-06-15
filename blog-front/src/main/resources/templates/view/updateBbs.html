@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://v3.bootcss.com/examples/carousel/#about -->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="headerlink2">
+</head>
+<body style="background-color: #c2c2c2;">
+<!--新增bbs的文章   -->
+<script type="text/javascript">
+    $(function () {
+        /**
+         * 启动小熊
+         */
+        flowjs();
+
+    });
+</script>
+<div th:include="page-header"></div>
+
+<div class="container">
+    <!--  展示基本的数据  -->
+    <div id="header_inner_show">
+        <h4>&gt;&gt;&gt;新增BBS文章：</h4>
+
+        <div style="background-color: white;padding: 15px;">
+
+            <form class="layui-form" action="" lay-filter="example">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">文章编号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="bbsId" lay-verify="bbsId" id="bbsId"
+                               class="layui-input" style="height:38px; "
+                               autocomplete="off" placeholder="请输入标题" th:value="${bbsId}" disabled="disabled">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">文章标题</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="bbsTitle" lay-verify="bbsTitle" id="bbsTitle"
+                               class="layui-input" style="height:38px; "
+                               autocomplete="off" placeholder="请输入标题">
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">文章描述</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入内容" class="layui-textarea" lay-verify="bbsDesc" id="bbsDesc"
+                                  name="bbsDesc"></textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">文章分类</label>
+                    <div class="layui-input-block">
+                        <select name="bbsType" lay-filter="bbsType" style="height:38px; " id="bbsType">
+                            <option value="">请选择</option>
+                            <option value="maths">数学</option>
+                            <option value="english">英语</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">文章内容</label>
+                    <div class="layui-input-block">
+                                <textarea placeholder="请输入内容" class="layui-textarea" name="topiccontent"
+                                          id="topiccontent"></textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+        <script>
+
+            $(function () {
+                init();
+
+                var bbsId = $("#bbsId").val();
+
+
+
+                layui.use(['form', 'layedit', 'laydate'], function () {
+
+
+                    var form = layui.form
+                        , layer = layui.layer
+                        , layedit = layui.layedit
+                        , laydate = layui.laydate;
+
+                    //日期
+                    laydate.render({
+                        elem: '#date'
+                    });
+                    laydate.render({
+                        elem: '#date1'
+                    });
+
+                    //创建一个编辑器
+                    var editIndex = layedit.build('LAY_demo_editor');
+
+                    //自定义验证规则
+                    form.verify({
+                        bbsTitle: function (value) {
+                            if (value.length < 8 || value.length > 20) {
+                                return '文章标题大于8个字小于20个字';
+                            }
+                        }
+                        , bbsDesc: function (value) {
+                            if (value.length < 8 || value.length > 36) {
+                                return '文章描述大于8个字小于35个字';
+                            }
+                        }, bbsType: function (value) {
+                            if (value.length == 0) {
+                                return '文章类型请选择';
+                            }
+                        }
+                        , content: function (value) {
+                            layedit.sync(editIndex);
+                        }
+                    });
+
+                    //监听指定开关
+                    form.on('switch(switchTest)', function (data) {
+                        layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
+                            offset: '6px'
+                        });
+                        layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+                    });
+
+
+                    //监听提交
+                    form.on('submit(demo1)', function (data) {
+
+                        // layer.alert(JSON.stringify(data.field), {
+                        //     title: '最终的提交信息'
+                        // });
+
+                        /**
+                         * 获取文章编辑的内容
+                         *
+                         */
+                        var topiccontent = CKEDITOR.instances.topiccontent.getData();
+
+                        data.field.bbsText = topiccontent;
+
+
+                        var bbsType = data.field.bbsType;
+
+                        if ("" == bbsType) {
+                            layer.alert("<font color='red'>请选择类型</font>", {
+                                title: '提示信息'
+                            });
+                            return false;
+                        }else if(topiccontent==""){
+                            layer.alert("<font color='red'>文章内容不能为空</font>", {
+                                title: '提示信息'
+                            });
+                            return false;
+                        }else {
+                            /**
+                             * 请求后台
+                             */
+
+                            $.post("/blog/v1/bbs/updateBbs",data.field,function(returnData){
+
+                                if(200==returnData.respCode){
+                                    layer.alert('更新信息成功', {
+                                        title: '系统消息'
+                                    });
+
+                                    window.location.href="/bbsZone";
+                                }else {
+                                    layer.alert(returnData.data, {
+                                        title: '系统消息'
+                                    });
+                                }
+
+                            });
+                        }
+
+                        return false;
+                    });
+
+
+                    $.get("/blog/v1/bbs/show?bbsId=" + bbsId, function (returnData) {
+                        if (200 == returnData.respCode) {
+                            if (undefined != returnData.data && "undefined" != returnData.data) {
+                                //$("#bbsTitle").val(returnData.data.bbsTitle);
+                                //$("#bbsType").val("maths");
+                                //$("#bbsType").attr("value",returnData.data.bbsCategory);
+                                returnData.data.bbsType=returnData.data.bbsCategory;
+                                //$("#bbsDesc").val(returnData.data.bbsDesc);
+
+                                returnData.data.bbsId = bbsId;
+
+                                //表单初始赋值
+                                form.val('example',returnData.data);
+
+                                var editor = CKEDITOR.instances.topiccontent;
+                                editor.setData(returnData.data.bbsText);
+                            } else {
+                                window.location.href = "bbsZone";
+                            }
+                        }
+                    });
+
+
+                    //表单初始赋值
+                    //form.val('example', );
+
+
+                });
+
+
+
+
+
+            });
+
+
+        </script>
+
+
+        <div class="shape circle"></div>
+        <div class="shape circle"></div>
+        <div class="shape circle"></div>
+        <div class="shape rectangle"></div>
+        <div class="shape triangle"></div>
+
+        <div th:include="monkey"></div>
+        <div style="clear: both;height: 300px;">
+
+        </div>
+        <div class="navbar-fixed-bottom" style="background-color: #8B4726" th:include="bottom">
+            <!--#8B4726-->
+        </div>
+</body>
+</html>

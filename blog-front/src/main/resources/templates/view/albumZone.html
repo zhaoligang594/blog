@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://v3.bootcss.com/examples/carousel/#about -->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="headerlink">
+</head>
+<!--<body style="background-color: #c2c2c2;">-->
+<body style="background-color: white;">
+<!--用户登陆后展示的首页  用户自己的博客的管理   -->
+<script type="text/javascript">
+
+
+    $(function () {
+        //document.write(_LoadingHtml);
+        /**
+         * 加入加载信息的图片
+         */
+        /**
+         * 启动小熊
+         */
+        flowjs();
+
+
+    });
+
+
+    layui.use(['layer', 'table','upload','form'], function () { //独立版的layer无需执行这一句
+        var $ = layui.jquery, layer = layui.layer, table = layui.table, form = layui.form,upload = layui.upload; //独立版的layer无需执行这一句
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#uploadImage' //绑定元素
+            ,url: '/blog/v1/file/uploadImage' //上传接口
+            ,done: function(res){
+                //上传完毕回调
+                console.log(res);
+                $('#photoPath').val(res.fileName)
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+        });
+
+
+
+        //第一个实例
+        table.render({
+            id: 'demoTest'
+            , elem: '#demo'
+            // , toolbar: '#toolbarDemo'
+            , height: 312
+            , even: true //开启隔行背景
+            , url: '/blog/v1/album/selectPhotos' //数据接口
+            , where: {token: localStorage.getItem("user_token"), id: 123}
+            , method: 'get'
+            , height: '600' //高度最大化减去差值
+            , page: true //开启分页
+            , cols: [[ //表头
+                // {field: 'id', title: 'ID', width:80, fixed: 'left'}
+                // ,
+                {field: '', title: '编号', type: 'radio'}
+                , {field: 'aId', title: 'ID',}
+                , {field: 'aPhoto', title: '相片地址',}
+                , {field: 'aMsg', title: '描述',}
+                , {field: 'aLocaltion', title: '位置',}
+                , {field: 'gmtCreate', title: '创建时间',}
+                , {field: 'gmtUpdate', title: '更新时间',}
+                , {fixed: 'right', width: 150, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+                // , {field: 'sign', title: '签名', width: 177}
+                // , {field: 'experience', title: '积分', width: 80, sort: true}
+                // , {field: 'score', title: '评分', width: 80, sort: true}
+                // , {field: 'classify', title: '职业', width: 80}
+                // , {field: 'wealth', title: '财富', width: 135, sort: true}
+            ]]
+            , parseData: function (res) { //res 即为原始返回的数据
+
+
+                var rep = {
+                    "respCode": res.respCode, //解析接口状态
+                    "message": res.message, //解析提示文本
+                    "totalCount": res.data.totalCount, //解析数据长度
+                    "data": res.data.data, //解析数据列表
+                };
+
+                return rep;
+            }
+            ,
+            request: {
+                pageName: 'currentPage' //页码的参数名称，默认：page
+                , limitName:
+                    'pageSize' //每页数据量的参数名，默认：limit
+            }
+            ,
+            response: {
+                statusName: 'respCode' //规定数据状态的字段名称，默认：code
+                , statusCode:
+                    200 //规定成功的状态码，默认：0
+                , msgName:
+                    'message' //规定状态信息的字段名称，默认：msg
+                , countName:
+                    'totalCount' //规定数据总数的字段名称，默认：count
+                , dataName:
+                    'data' //规定数据列表的字段名称，默认：data
+            }
+        });
+
+
+        //监听事件
+        table.on('tool(test)', function (obj) {
+            var data = obj.data; //获得当前行数据
+            console.log(data);
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+            if (layEvent === 'detail') { //查看
+                //do somehing
+            } else if (layEvent === 'del') { //删除
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    layer.close(index);
+                    //向服务端发送删除指令
+                });
+            } else if (layEvent === 'edit') { //编辑
+                //do something
+
+                //同步更新缓存对应的值
+                obj.update({
+                    username: '123'
+                    , title: 'xxx'
+                });
+            } else if (layEvent === 'LAYTABLE_TIPS') {
+                layer.alert('Hi，头部工具栏扩展的右侧图标。');
+            }
+
+        });
+
+
+        //表单的基本操作
+        form.on('submit(formDemo)', function (data) {
+            layer.msg(JSON.stringify(data.field));
+            $.post("/blog/v1/album/addPhoto",data.field,function (res) {
+                if(200==res.respCode){
+                    alert("加入成功");
+                }
+            });
+            return false;
+        });
+
+
+
+    });
+
+
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+
+    <!--&lt;!&ndash; 这里同样支持 laytpl 语法，如： &ndash;&gt;-->
+    <!--{{#  if(d.auth > 2){ }}-->
+    <!--<a class="layui-btn layui-btn-xs" lay-event="check">审核</a>-->
+    <!--{{#  } }}-->
+</script>
+
+<div th:include="page-header-main"></div>
+<div class="container" style="width: 80%;">
+
+
+
+    <div class="layui-row">
+        <div class="layui-col-md2">
+            <div th:include="private_left_tree"></div>
+        </div>
+        <div class="layui-col-md10">
+
+            <div style="padding: 5px 15px">
+            <span class="layui-breadcrumb">
+              <a href="javaScript:;">博客维护</a>
+              <a href="javaScript:;">个人文章管理</a>
+            </span>
+            </div>
+
+            <!--  展示基本的数据  -->
+            <div id="header_inner_show">
+
+                <div style="margin-left: 30px;margin-bottom: 26px;">
+                    <button type="button" class="layui-btn" id="uploadImage">
+                        <i class="layui-icon">&#xe67c;</i>上传图片
+                    </button>
+                </div>
+
+                <form class="layui-form" action="javaScript:;">
+
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">照片链接</label>
+                        <div class="layui-input-block">
+                            <input id="photoPath" type="text" name="photoPath" required  lay-verify="required" placeholder="照片链接"
+                                   autocomplete="off" class="layui-input" disabled="">
+                        </div>
+                    </div>
+
+
+
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">照片的描述</label>
+                        <div class="layui-input-block">
+                            <textarea name="msg" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">位置</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="location" required  lay-verify="required" placeholder="位置" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+
+            <div style="padding: 15px;margin: 0px auto;">
+                <script type="text/html" id="toolbarDemo">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+                        <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>
+                        <button class="layui-btn layui-btn-sm" lay-event="update">编辑</button>
+                    </div>
+                </script>
+                <table id="demo" lay-filter="test"></table>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<div th:include="monkey"></div>
+<div style="clear: both;height: 60px;">
+
+</div>
+<div style="background-color: #8B4726" th:include="bottom">
+    <!--#8B4726-->
+</div>
+</body>
+</html>

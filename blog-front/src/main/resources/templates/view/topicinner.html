@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://v3.bootcss.com/examples/carousel/#about -->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="headerlink">
+</head>
+<body style="background-color: white;">
+<!--日常杂论的首页   -->
+<script type="text/javascript">
+    $(function () {
+        debugger;
+
+        // $(".navbar-head").on("click", null, function () {
+        //     addLoading($("#header_inner_show"));
+        //     var url = $(this).attr("url") + "?token=" + localStorage.getItem("user_token");
+        //     $.get(url, function (returnData) {
+        //         completeLoading();
+        //         if (typeof(returnData) == "object") {
+        //             $("#header_inner_show").html(returnData.data);
+        //         } else {
+        //             $("#header_inner_show").html(returnData);
+        //         }
+        //     });
+        //
+        // });
+
+
+        // $('body').append('<div id="topMessage" class="color1"><span><a href="#topic_inner_liuyan">' +
+        //     '<i class="layui-icon layui-icon-reply-fill" style="font-size: 30px; color: white;">' +
+        //     '</i> </a></span></div>');
+        //
+        //
+        // $('body').append('<div id="toTop" class="color1"><span>' +
+        //     '<i class="layui-icon layui-icon-up" style="font-size: 30px; color: white;">' +
+        //     '</i>  </span></div>');
+        //
+        // $(window).scroll(function () {
+        //     if ($(this).scrollTop() != 0) {
+        //         $('#toTop').fadeIn();
+        //         $('#topMessage').fadeIn();
+        //     } else {
+        //         $('#toTop').fadeOut();
+        //         $('#topMessage').fadeOut();
+        //     }
+        // });
+        // $('#toTop').click(function () {
+        //     $("html, body").animate({scrollTop: 0}, 700);
+        //     return false;
+        // });
+
+
+        $.get("/blog/v1/image/getKaptcha", function (returnData) {
+            if (returnData.respCode == 200) {
+                var data = returnData.data;
+                $("#inner_liuyan_img").attr("src", data.verifyCode);
+                localStorage.setItem("verifyCodeKey", data.verifyCodeKey);
+            }
+        });
+
+        $("#inner_liuyan_img").click(function () {
+            $.get("/blog/v1/image/getKaptcha", function (returnData) {
+                if (returnData.respCode == 200) {
+                    var data = returnData.data;
+                    $("#inner_liuyan_img").attr("src", data.verifyCode);
+                    localStorage.setItem("verifyCodeKey", data.verifyCodeKey);
+                }
+            });
+        });
+
+
+        layui.use(['form', 'layedit', 'laydate'], function () {
+
+
+            var form = layui.form
+                , layer = layui.layer
+                , layedit = layui.layedit
+                , laydate = layui.laydate;
+
+            //日期
+            laydate.render({
+                elem: '#date'
+            });
+            laydate.render({
+                elem: '#date1'
+            });
+
+
+            layedit.set({
+                uploadImage: {
+                    url: "/blog/v1/file/uploadImageForEditor" //接口url
+                    , type: 'post' //默认post
+                }
+            });
+
+
+            //创建一个编辑器
+            var editIndex = layedit.build('LAY_demo_editor', {
+                height: 120,//设置编辑器高度
+                tool: [
+                    'strong' //加粗
+                    , 'italic' //斜体
+                    , 'underline' //下划线
+                    , 'del' //删除线
+
+                    , '|' //分割线
+
+                    , 'left' //左对齐
+                    , 'center' //居中对齐
+                    , 'right' //右对齐
+                    , 'link' //超链接
+                    , 'unlink' //清除链接
+                    , 'face' //表情
+                    //, 'image' //插入图片
+                    // , 'help' //帮助
+                ]
+            });
+
+
+            //监听提交
+            form.on('submit(topicLiuyan)', function (data) {
+
+                // layer.alert(JSON.stringify(data.field), {
+                //     title: '最终的提交信息'
+                // });
+
+                /**
+                 * 获取文章编辑的内容
+                 *
+                 */
+
+                debugger;
+                addLoading($("#header_inner_show"));
+
+
+                var text = layedit.getContent(editIndex);
+
+
+                if (text.length < 5 || text.length > 300) {
+                    completeLoading();
+                    layer.alert('输入的留言留言信息5到300字', {
+                        title: '系统提示'
+                    });
+
+                    return false;
+                }
+
+
+                var postData = {
+                    message: text,
+                    verifyCodeKey: localStorage.getItem("verifyCodeKey"),
+                    verifyCode: $("#inner_liuyan_verifyCode").val()
+                };
+
+
+                /**
+                 * 请求的基本操作
+                 */
+                $.post("v1/liuyan/111", postData, function (returnData) {
+                    debugger;
+                    completeLoading();
+                    if (returnData.respCode == 200) {
+                        layer.alert('发表成功', {
+                            title: '提示信息'
+                        });
+                        window.location.reload();
+                    } else {
+                        layer.alert(returnData.data, {
+                            title: '提示信息'
+                        });
+
+                        return false;
+                    }
+
+                });
+
+
+                return false;
+            });
+
+
+        });
+
+
+        /**
+         * 启动小熊
+         */
+        flowjs();
+
+    });
+</script>
+
+<style>
+    .text-topic-bottom{
+        font-size: 25px!important;
+        margin: 5px;
+    }
+
+    .content-text {
+        padding: 20px!important;
+        background: #fff;
+        margin-bottom: 26px!important;
+    }
+</style>
+<div th:include="page-header-main"></div>
+
+
+<!--  轮播的基本操作   -->
+<div class="layui-row  blog singlepost" style="width: 90%;max-width: 1400px;margin: 0 auto;">
+    <div class="layui-col-md8 content-text">
+        <div class="layui-row">
+
+            <!--class="layui-col-md8"-->
+            <article >
+
+                <div th:if="!${topicInfo.currentTopic}">
+                    <h3>抱歉，您请求的没有数据没有数据</h3>
+                </div>
+                <div th:if="${topicInfo.currentTopic}">
+
+                    <!--<h1 class="page-header sidebar-title">-->
+                    <!--<span th:text="${topicInfo.currentTopic.topicTitle}"/>-->
+                    <!--</h1>-->
+                    <!--<img src="/images/unsplash1.jpg" class="img-responsive" alt="photo"/>-->
+                    <!--<hr>-->
+
+
+                    <div class="text-center" style="padding: 15px;">
+                        <a class="navbar-head_inner" href="#" role="button" style="padding-left: 30px"
+                           th:href="@{topicinner2(topicId=${topicInfo.preTopic.topicId},searchTopicType=${topicInfo.currentTopic.searchTopicType},notSearchTopicType=${topicInfo.currentTopic.notSearchTopicType})}">
+                            上一篇：<span th:text="${topicInfo.preTopic.topicTitle}"/>
+                        </a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a class="navbar-head_inner" href="#" role="button"
+                           th:href="@{topicinner2(topicId=${topicInfo.nextTopic.topicId},searchTopicType=${topicInfo.currentTopic.searchTopicType},notSearchTopicType=${topicInfo.currentTopic.notSearchTopicType})}">
+                            下一篇：<span th:text="${topicInfo.nextTopic.topicTitle}"/>
+                        </a>
+                    </div>
+
+
+                    <div id="test-editormd-view2" style="padding: 0px;margin: 0px;">
+                        <textarea id="append-test" style="display:none;" th:text="${topicInfo.currentTopic.topicText}">###Hello world!</textarea>
+                    </div>
+
+
+                    <link rel="stylesheet" href="/editormd/css/editormd.preview.css"/>
+                    <script src="/editormd/lib/marked.min.js"></script>
+                    <script src="/editormd/lib/prettify.min.js"></script>
+                    <script src="/editormd/lib/raphael.min.js"></script>
+                    <script src="/editormd/lib/underscore.min.js"></script>
+                    <script src="/editormd/lib/sequence-diagram.min.js"></script>
+                    <script src="/editormd/lib/flowchart.min.js"></script>
+                    <script src="/editormd/lib/jquery.flowchart.min.js"></script>
+                    <script src="/editormd/editormd.js"></script>
+
+
+                    <script type="text/javascript">
+                        $(function () {
+                            var testEditormdView, testEditormdView2;
+
+                            // $.get("test.md", function(markdown) {
+                            //
+                            //     testEditormdView = editormd.markdownToHTML("test-editormd-view", {
+                            //         markdown        : markdown ,//+ "\r\n" + $("#append-test").text(),
+                            //         //htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
+                            //         htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                            //         //toc             : false,
+                            //         tocm            : true,    // Using [TOCM]
+                            //         tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
+                            //         //gfm             : false,
+                            //         //tocDropdown     : true,
+                            //         // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
+                            //         emoji           : true,
+                            //         taskList        : true,
+                            //         tex             : true,  // 默认不解析
+                            //         flowChart       : true,  // 默认不解析
+                            //         sequenceDiagram : true,  // 默认不解析
+                            //     });
+                            //
+                            //     //console.log("返回一个 jQuery 实例 =>", testEditormdView);
+                            //
+                            //     // 获取Markdown源码
+                            //     //console.log(testEditormdView.getMarkdown());
+                            //
+                            //     //alert(testEditormdView.getMarkdown());
+                            // });
+
+                            testEditormdView2 = editormd.markdownToHTML("test-editormd-view2", {
+                                htmlDecode: "style,script,iframe",  // you can filter tags decode
+                                emoji: true,
+                                taskList: true,
+                                tex: true,  // 默认不解析
+                                flowChart: true,  // 默认不解析
+                                sequenceDiagram: true,  // 默认不解析
+                            });
+                        });
+
+
+                    </script>
+
+
+                    <!--<div style="overflow:auto;clear: both;">-->
+                    <!--<P th:utext="${topicInfo.currentTopic.topicText}"></P>-->
+                    <!--</div>-->
+
+                    <div class="layui-row">
+                        <div class="layui-col-md12">
+                            <div class="entry-meta text-topic-bottom">
+                            <span><i class="fa fa-calendar-o"></i>&nbsp;<span
+                                    th:text="${#dates.format(topicInfo.currentTopic.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"/></span>
+                                <span><i class="fa fa-user"></i><a href="/touchMe" target="_blank"><span th:text="${topicInfo.currentTopic.nickName}"></span></a></span>
+                                <span> <i class="fa fa-tag"></i> <a href="#" rel="tag">Audio</a></span>
+                                <div class="pull-right"><span><i class="fa fa-eye"></i><span th:text="${topicInfo.currentTopic.seeCount}"></span></span>
+                                    <!--<span>-->
+                                    <!--<i-->
+                                    <!--class="fa fa-comment"></i> 4</span>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="text-center" style="padding: 15px;">
+                        <a class="navbar-head_inner" href="#" role="button" style="padding-left: 30px"
+                           th:href="@{topicinner2(topicId=${topicInfo.preTopic.topicId},searchTopicType=${topicInfo.currentTopic.searchTopicType},notSearchTopicType=${topicInfo.currentTopic.notSearchTopicType})}">
+                            上一篇：<span th:text="${topicInfo.preTopic.topicTitle}"/>
+                        </a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a class="navbar-head_inner" href="#" role="button"
+                           th:href="@{topicinner2(topicId=${topicInfo.nextTopic.topicId},searchTopicType=${topicInfo.currentTopic.searchTopicType},notSearchTopicType=${topicInfo.currentTopic.notSearchTopicType})}">
+                            下一篇：<span th:text="${topicInfo.nextTopic.topicTitle}"/>
+                        </a>
+                    </div>
+
+
+                </div>
+
+            </article>
+
+
+
+
+        </div>
+
+    </div><!--<div class="layui-col-md8">-->
+    <div class="layui-col-md4">
+        <div style="margin-left: 10px;" th:include="right-page">
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div th:include="monkey"></div>
+
+
+<div  style="background-color: #8B4726" th:include="bottom"></div>
+
+</div>
+
+
+<script type="text/javascript">
+    (function (win, doc) {
+        var s = doc.createElement("script"), h = doc.getElementsByTagName("head")[0];
+        if (!win.alimamatk_show) {
+            s.charset = "gbk";
+            s.async = true;
+            s.src = "https://alimama.alicdn.com/tkapi.js";
+            h.insertBefore(s, h.firstChild);
+        }
+        ;
+        var o = {
+            pid: "mm_374520194_421350086_108390850062", /*推广单元ID，用于区分不同的推广渠道*/
+            appkey: "25977649", /*通过TOP平台申请的appkey，设置后引导成交会关联appkey*/
+            unid: "", /*自定义统计字段*/
+            type: "click" /* click 组件的入口标志 （使用click组件必设）*/
+        };
+        win.alimamatk_onload = win.alimamatk_onload || [];
+        win.alimamatk_onload.push(o);
+    })(window, document);
+</script>
+
+</body>
+</html>

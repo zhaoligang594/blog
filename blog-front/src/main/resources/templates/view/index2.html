@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://v3.bootcss.com/examples/carousel/#about -->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>日常杂论</title>
+</head>
+<body>
+<script>
+    var projectName = '/';
+    window.onload = function () {
+
+        //var url='http://file.breakpoint.vip/picture/blog/QJ6546209843.jpg';
+
+
+        //$(".inner_index_container").css("background-image",url);
+        $.get(projectName + "/topic/getTopic/1/2", function (returnData) {
+            debugger;
+        });
+    }
+</script>
+<div class="container" id="inner_index_container" style="padding: 2px 2px;">
+    <!-- Example row of columns -->
+    <div  th:each="topic:${topics}">
+        <div class="" style="clear: both;padding: 2px 20px;">
+            <p>编号：<span th:text="${topic.topicId}"/>&nbsp;&nbsp; 类别：<span th:text="${topic.topicCategory}"/>&nbsp;&nbsp;
+                时间：<span th:text="${#dates.format(topic.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"/></p>
+            <p>标题：<span th:text="${topic.topicTitle}"/></p>
+            <p>描述：<span th:text="${topic.topicDesc}"/></p>
+            <p style="float: right;"><a class="navbar-head_inner btn btn-default" href="#" role="button"
+                                        th:href="@{topicinner(topicId=${topic.topicId})}">View details »</a></p>
+        </div>
+    </div>
+    <hr/>
+</div> <!-- /container -->
+
+
+<script>
+    $(function () {
+        $(".navbar-head_inner").click(function () {
+            debugger;
+            var url = $(this).attr("href");
+            $.get(url, function (returnData) {
+                if (typeof(returnData) == "object") {
+                    $("#header_inner_show").html(returnData.data);
+                } else {
+                    $("#header_inner_show").html(returnData);
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

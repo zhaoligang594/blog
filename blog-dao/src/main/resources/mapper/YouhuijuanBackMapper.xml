@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.breakpoint.dao.YouhuijuanMapper">
+    <select id="selectYouhuijuanByPageInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from youhuijuan
+        <where>
+            <trim prefixOverrides="and" prefix="and">
+                <if test="null!=userId">
+                    and user_id=#{userId}
+                </if>
+                <if test="null!=keyWords">
+                    and food_name like "%"#{keyWords}"%"
+                </if>
+            </trim>
+        </where>
+        order by gmt_create desc
+        limit #{pageStart},#{pageSize}
+    </select>
+
+    <select id="countYouhuijuanByPageInfo" resultType="Integer">
+        select count(food_id)
+        from youhuijuan
+        <where>
+            <trim prefixOverrides="and" prefix="and">
+                <if test="null!=userId">
+                    and user_id=#{userId}
+                </if>
+                <if test="null!=keyWords">
+                    and food_name like "%"#{keyWords}"%"
+                </if>
+            </trim>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://v3.bootcss.com/examples/carousel/#about -->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="headerlink">
+</head>
+<body style="background-color: white;">
+<!--日常杂论的首页   -->
+<script type="text/javascript">
+    $(function () {
+        debugger;
+        //document.write(_LoadingHtml);
+        /**
+         * 加入加载信息的图片
+         */
+        // addLoading($("#header_inner_show"));
+        // completeLoading();
+
+        // $.get("/index", function (returnData) {
+        //     completeLoading();
+        //     $("#header_inner_show").html(returnData);
+        // });
+
+        // $(".navbar-head").on("click", null, function () {
+        //     addLoading($("#header_inner_show"));
+        //     var url = $(this).attr("url") + "?token=" + localStorage.getItem("user_token");
+        //     $.get(url, function (returnData) {
+        //         completeLoading();
+        //         if (typeof(returnData) == "object") {
+        //             $("#header_inner_show").html(returnData.data);
+        //         } else {
+        //             $("#header_inner_show").html(returnData);
+        //         }
+        //     });
+        //
+        // });
+        /**
+         * 启动小熊
+         */
+        flowjs();
+
+    });
+</script>
+<div th:include="page-header-main"></div>
+<div class="container">
+    <!--  展示基本的数据  -->
+    <div id="header_inner_show" style="margin: 0px auto;width: 500px;height: 500px;z-index: 2;line-height: inherit;">
+        <div class="text-center">
+            <img alt="" src="/image/404.png" style="margin: 0px auto;"/>
+        </div>
+
+    </div>
+</div>
+
+<!--<div th:include="cartoon"></div>-->
+
+<!--<div class="shape circle"></div>-->
+<!--<div class="shape circle"></div>-->
+<!--<div class="shape circle"></div>-->
+<!--<div class="shape rectangle"></div>-->
+<!--<div class="shape triangle"></div>-->
+
+
+<div th:include="monkey"></div>
+
+<!--<div style="clear: both;height: 300px;">-->
+
+<!--</div>-->
+<!--class="navbar-fixed-bottom"-->
+<div  style="background-color: #8B4726" th:include="bottom">
+    <!--#8B4726-->
+</div>
+
+</body>
+</html>

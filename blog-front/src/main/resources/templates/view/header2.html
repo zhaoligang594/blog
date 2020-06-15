@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://v3.bootcss.com/examples/carousel/#about -->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="headerlink">
+</head>
+<body style="background-color: #c2c2c2;">
+<!--日常杂论的首页   -->
+<script type="text/javascript">
+    $(function () {
+        debugger;
+        //document.write(_LoadingHtml);
+        /**
+         * 加入加载信息的图片
+         */
+        // addLoading($("#header_inner_show"));
+        // completeLoading();
+
+        // $.get("/index", function (returnData) {
+        //     completeLoading();
+        //     $("#header_inner_show").html(returnData);
+        // });
+
+        // $(".navbar-head").on("click", null, function () {
+        //     addLoading($("#header_inner_show"));
+        //     var url = $(this).attr("url") + "?token=" + localStorage.getItem("user_token");
+        //     $.get(url, function (returnData) {
+        //         completeLoading();
+        //         if (typeof(returnData) == "object") {
+        //             $("#header_inner_show").html(returnData.data);
+        //         } else {
+        //             $("#header_inner_show").html(returnData);
+        //         }
+        //     });
+        //
+        // });
+        /**
+         * 启动小熊
+         */
+        flowjs();
+
+    });
+</script>
+
+<div th:include="page-header"></div>
+<div class="container">
+    <!--  展示基本的数据  -->
+
+
+    <!--<div class="layui-col-md2">-->
+
+    <!--<ul class="layui-nav layui-nav-tree" lay-filter="test">-->
+    <!--&lt;!&ndash; 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> &ndash;&gt;-->
+    <!--<li class="layui-nav-item layui-nav-itemed">-->
+    <!--<a href="javascript:;">默认展开</a>-->
+    <!--<dl class="layui-nav-child">-->
+    <!--<dd><a href="javascript:;">选项1</a></dd>-->
+    <!--<dd><a href="javascript:;">选项2</a></dd>-->
+    <!--<dd><a href="">跳转</a></dd>-->
+    <!--</dl>-->
+    <!--</li>-->
+    <!--<li class="layui-nav-item">-->
+    <!--<a href="javascript:;">解决方案</a>-->
+    <!--<dl class="layui-nav-child">-->
+    <!--<dd><a href="">移动模块</a></dd>-->
+    <!--<dd><a href="">后台模版</a></dd>-->
+    <!--<dd><a href="">电商平台</a></dd>-->
+    <!--</dl>-->
+    <!--</li>-->
+    <!--<li class="layui-nav-item"><a href="">产品</a></li>-->
+    <!--<li class="layui-nav-item"><a href="">大数据</a></li>-->
+    <!--</ul>-->
+
+
+    <!--</div>-->
+    <!--<div class="layui-col-md8" style="padding-left: 20px;">-->
+
+
+    <div style="clear: both;padding: 5px 10px;">
+        <span class="layui-breadcrumb" lay-separator="|">
+          <a href="index">全部博客</a>
+          <a href="index?topicType=Java">Java</a>
+          <a href="index?topicType=JavaScript">JavaScript</a>
+          <a href="index?topicType=Spring">Spring</a>
+          <a href="index?topicType=Mybatis">Mybatis</a>
+          <a href="index?topicType=Struts2">Struts2</a>
+          <a href="index?topicType=Hibernate">Hibernate</a>
+          <a href="index?topicType=Other">Other</a>
+    </span>
+    </div>
+
+
+    <!--  上一页  下一页  -->
+    <div class="container" style="clear: both;padding: 5px 10px;">
+        <div style="clear: both;">
+            <a class="navbar-head_inner" href="#" role="button"
+               th:href="@{index(currentPage=${pageInfo.prePage},topicType=${pageInfo.topicType})}">
+                上一页
+            </a>
+            <a class="navbar-head_inner" href="#" role="button"
+               th:href="@{index(currentPage=${pageInfo.nextPage},topicType=${pageInfo.topicType})}">
+                下一页
+            </a>
+            &nbsp;当前第<span th:text="${pageInfo.currentPage}+'页 &nbsp;共'+${pageInfo.pageTotal}+'页'"/>页
+        </div>
+    </div>
+
+
+    <div style="padding: 2px 2px;clear: both;margin: 0px 0px;">
+
+        <!-- Example row of columns -->
+        <div th:each="topic:${pageInfo.data}">
+
+            <div class=""
+                 style="clear: both;background-image:url('http://file.breakpoint.vip/picture/blog/back-01.png');padding: 7px 10px;border-radius:10px;margin: 10px 0px;">
+                <!--<div class="" style="clear: both;background-image:url('http://file.breakpoint.vip/picture/blog/a3342c8b800ee22fff76b7bd45281a97.jpg');background-color:#ffd3d3;padding: 7px 25px;border-radius:10px;margin: 20px 0px;">-->
+                <p>编号：
+                    <span class="label label-important">New</span>
+
+                    <span th:text="${topic.topicId}+'&nbsp;&nbsp;最后修改时间:'+${#dates.format(topic.gmtModified,'yyyy-MM-dd HH:mm:ss')}"/>
+                </p>
+                <p>
+                    <span th:text="'发布时间：'+${#dates.format(topic.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"/>
+                </p>
+                <p>
+                    类别：<span th:text="${topic.topicCategory}"/>
+                </p>
+                <p>标题：<a class="navbar-head_inner" href="#" role="button" target="_blank"
+                         th:href="@{topicinner2(topicId=${topic.topicId})}">
+                    <span th:text="${topic.topicTitle}"/>
+                </a>
+                </p>
+                <p>
+                    描述：<a class="navbar-head_inner" href="#" role="button" target="_blank"
+                          th:href="@{topicinner2(topicId=${topic.topicId})}">
+                    <span th:text="${topic.topicDesc}"/>
+                </a>
+                </p>
+
+                <div>
+                    <img src="images/recommend.gif"/>
+                </div>
+                <!-- <p style="float: right;"><a class="navbar-head_inner btn btn-default" href="#" role="button"
+                                             th:href="@{topicinner(topicId=${topic.topicId})}">View details »</a></p>-->
+            </div>
+        </div>
+
+    </div> <!-- /container -->
+
+
+    <!--  上一页  下一页  -->
+    <div class="container" style="clear: both;padding: 5px 10px;">
+        <div style="clear: both;">
+            <a class="navbar-head_inner" href="#" role="button"
+               th:href="@{index(currentPage=${pageInfo.prePage},topicType=${pageInfo.topicType})}">
+                上一页
+            </a>
+            <a class="navbar-head_inner" href="#" role="button"
+               th:href="@{index(currentPage=${pageInfo.nextPage},topicType=${pageInfo.topicType})}">
+                下一页
+            </a>
+            &nbsp;当前第<span th:text="${pageInfo.currentPage}+'页 &nbsp;共'+${pageInfo.pageTotal}+'页'"/>页
+        </div>
+    </div>
+
+
+</div>
+
+<div th:include="cartoon"></div>
+<!--<div class="shape circle"></div>-->
+<!--<div class="shape circle"></div>-->
+<!--<div class="shape circle"></div>-->
+<!--<div class="shape rectangle"></div>-->
+<!--<div class="shape triangle"></div>-->
+
+<div th:include="monkey"></div>
+
+<div style="clear: both;margin: 0px auto;width: 950px;height: 150px">
+    <a href="https://promotion.aliyun.com/ntms/act/enterprise-discount.html?userCode=9opzfbzq" target="_blank">
+        <img src="http://file.breakpoint.vip/picture/blog/950_90.jpg"/>
+    </a>
+</div>
+<!--class="navbar-fixed-bottom"-->
+<div  style="background-color: rgb(55,61,65);" th:include="bottom">
+    <!--#8B4726-->
+</div>
+</body>
+</html>

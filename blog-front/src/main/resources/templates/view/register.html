@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://v3.bootcss.com/examples/carousel/#about -->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="headerlink">
+</head>
+<body style="background: url('images/bg1.jpg') no-repeat 0px 0px;">
+<script type="text/javascript">
+
+
+    layui.use('layer', function () { //独立版的layer无需执行这一句
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+
+        $("#sign-user-login").click(function () {
+
+
+
+            if ($("#username").val() == '') {
+                layer.msg('<h4>-----用户名不能为空-----</h4>', {
+                    time: 2000, //20s后自动关闭
+                    btn: []
+                });
+                return false;
+            }
+            if ($("#password").val() == '') {
+                layer.msg('<h4>-----密码不能为空-----</h4>', {
+                    time: 2000, //20s后自动关闭
+                    btn: []
+                });
+                return false;
+            }
+
+            var username = $("#username").val();
+            var password = $("#password").val();
+
+            var requestdata = {
+                "nickname": $("#nickName").val(),
+                "userName": $("#userName").val(),
+                "verifyCode": $("#inner_sign_verifyCode").val(),
+                "verifyCodeKey": localStorage.getItem("verifyCodeKey")
+            };
+
+            addLoading($("#header_inner_show"));
+
+
+            $.post("/blog/v1/user/register", requestdata, function (returnData) {
+                completeLoading();
+                debugger;
+                if (returnData.respCode == 200) {
+                    layer.alert('注册成功，请登陆邮箱激活用户', {
+                        title: '提示信息'
+                    });
+                    window.location.href = "signin";
+                } else {
+
+                    layer.msg('<h4>------' + returnData.data + '-------</h4>', {
+                        time: 2000 //20s后自动关闭
+                    });
+
+                }
+
+            });
+            return;
+        });
+
+
+    });
+
+
+    $(function () {
+        $.get("/blog/v1/image/getKaptcha", function (returnData) {
+            if (returnData.respCode == 200) {
+                var data = returnData.data;
+                $("#inner_liuyan_img_sign").attr("src", data.verifyCode);
+                localStorage.setItem("verifyCodeKey", data.verifyCodeKey);
+            }
+        });
+
+        $("#inner_liuyan_img_sign").click(function () {
+            $.get("/blog/v1/image/getKaptcha", function (returnData) {
+                if (returnData.respCode == 200) {
+                    var data = returnData.data;
+                    $("#inner_liuyan_img_sign").attr("src", data.verifyCode);
+                    localStorage.setItem("verifyCodeKey", data.verifyCodeKey);
+                }
+            });
+        });
+
+
+    });
+
+
+</script>
+
+
+<div th:include="page-header-main"></div>
+
+
+<h1 style="color: #8B4726;">用户注册</h1>
+<div class="login-form" id="header_inner_show">
+    <!-- <div class="close"> </div> -->
+    <!--<div class="head-info">-->
+    <!--<label class="lbl-1"> </label>-->
+    <!--<label class="lbl-2"> </label>-->
+    <!--<label class="lbl-3"> </label>-->
+    <!--</div>-->
+    <div class="clear"></div>
+    <!--<div class="avtar">-->
+    <!--<img src="images/avtar.png"/>-->
+    <!--</div>-->
+    <form>
+        <input type="text" class="login" id="nickName" placeholder="用户昵称">
+        <input type="text" class="login" id="userName" placeholder="用户邮箱" style="margin: 0px 0px;">
+        <div style="position: relative;">
+            <input type="text" id="inner_sign_verifyCode" placeholder="请输入验证码" style="margin-top: 5px;">
+            <img src="" id="inner_liuyan_img_sign">
+        </div>
+    </form>
+    <div class="signin">
+        <input type="submit" value="Register" id="sign-user-login">
+    </div>
+    <div style="float: left;padding: 5px;"><a href="signin">有账号？前往登陆</a></div>
+
+
+</div>
+
+<div class="text-center" style="color: orange;clear: both;padding: 15px;">
+    用户注册后，会跳转到登陆页，但是也是不能登陆的，请查看自己的邮箱，及时激活自己的账户
+</div>
+
+<!--<div th:include="cartoon"></div>-->
+<!--<div class="shape circle"></div>-->
+<!--<div class="shape circle"></div>-->
+<!--<div class="shape circle"></div>-->
+<!--<div class="shape rectangle"></div>-->
+<!--<div class="shape triangle"></div>-->
+
+<div th:include="monkey"></div>
+<!--<div style="clear: both;height: 150px;opacity: 0;">-->
+
+<!--</div>-->
+<div  style="background-color: #8B4726" th:include="bottom">
+    <!--#8B4726-->
+</div>
+
+</body>
+</html>

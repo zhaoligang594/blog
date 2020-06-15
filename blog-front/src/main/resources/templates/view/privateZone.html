@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://v3.bootcss.com/examples/carousel/#about -->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="headerlink">
+</head>
+<!--<body style="background-color: #c2c2c2;">-->
+<body style="background-color: white;">
+<!--用户登陆后展示的首页  用户自己的博客的管理   -->
+<script type="text/javascript">
+
+
+    $(function () {
+        //document.write(_LoadingHtml);
+        /**
+         * 加入加载信息的图片
+         */
+
+
+        var projectName = '/';
+        $("#btn-primary-resume").click(function () {
+            alert(1);
+        });
+        $("#btn-primary-topic").click(function () {
+            window.location.href = 'edittopic';
+        });
+
+        $(".btn-topic-update").click(function () {
+            window.location.href = 'updatetopic?topicId=' + $(this).attr("topicId");
+        });
+
+        /**
+         * 刷新发布的缓存
+         */
+        $("#btn-primary-freash").click(function () {
+
+            addLoading($("#header_inner_show"));
+
+
+            var postData = {};
+
+            /**
+             * 请求的基本操作
+             */
+            $.post("v1/cache/refresh", postData, function (returnData) {
+                completeLoading();
+                if (returnData.respCode == 200) {
+                    alert("刷新成功");
+                    window.location.reload();
+                } else {
+                    alert(returnData.data);
+                }
+
+            });
+
+        });
+
+
+        /**
+         * 启动小熊
+         */
+        flowjs();
+
+
+    });
+
+
+    layui.use(['layer', 'table'], function () { //独立版的layer无需执行这一句
+        var $ = layui.jquery, layer = layui.layer, table = layui.table; //独立版的layer无需执行这一句
+
+        // layer.open({
+        //     type: 1
+        //     ,
+        //     title: false //不显示标题栏
+        //     ,
+        //     closeBtn: false
+        //     ,
+        //     area: '300px;'
+        //     ,
+        //     shade: 0.8
+        //     ,
+        //     id: 'LAY_layuipro' //设定一个id，防止重复弹出
+        //     ,
+        //     btn: ['朕知道啦！！！']
+        //     ,
+        //     btnAlign: 'c'
+        //     ,
+        //     moveType: 1 //拖拽模式，0或者1
+        //     ,
+        //     content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">亲！欢迎访问日常杂论网站<br>该网站技术支持--Leo Zhao<br><br>日常杂论网站的主题是站主发表一些平时的日常学习过程中或者生活中有趣有意义的文章<br><br>bbs模块是用于以后用户注册以及发表的文章论坛模块。<br>' +
+        //     '<br>淘宝优惠卷模块是每天更新的优惠卷---请理性消费。<br><br>该网站还支持网站的留言功能，如果有任何疑问或者想进一步交流请联系我</div>'
+        //     ,
+        //     success: function (layero) {
+        //         // var btn = layero.find('.layui-layer-btn');
+        //         // btn.find('.layui-layer-btn0').attr({
+        //         //     href: 'http://www.layui.com/'
+        //         //     ,target: '_blank'
+        //         // });
+        //     }
+        // });
+
+
+        //第一个实例
+        table.render({
+            id: 'demoTest'
+            , elem: '#demo'
+            , toolbar: '#toolbarDemo'
+            , height: 312
+            , even: true //开启隔行背景
+            , url: '/blog/v1/topic/getAllTopicByUser' //数据接口
+            , where: {token: localStorage.getItem("user_token"), id: 123}
+            , method: 'get'
+            , height: '600' //高度最大化减去差值
+            , page: true //开启分页
+            , cols: [[ //表头
+                // {field: 'id', title: 'ID', width:80, fixed: 'left'}
+                // ,
+                {field: '', title: '编号', type: 'radio'}
+                , {field: 'topicId', title: '编号',}
+                , {field: 'topicTitle', title: '标题',}
+                , {field: 'topicDesc', title: '描述',}
+                , {field: 'topicCategory', title: '分类',}
+                // , {field: 'sign', title: '签名', width: 177}
+                // , {field: 'experience', title: '积分', width: 80, sort: true}
+                // , {field: 'score', title: '评分', width: 80, sort: true}
+                // , {field: 'classify', title: '职业', width: 80}
+                // , {field: 'wealth', title: '财富', width: 135, sort: true}
+            ]]
+            , parseData: function (res) { //res 即为原始返回的数据
+
+
+                var rep = {
+                    "respCode": res.respCode, //解析接口状态
+                    "message": res.message, //解析提示文本
+                    "totalCount": res.data.totalCount, //解析数据长度
+                    "data": res.data.data, //解析数据列表
+                };
+
+                return rep;
+            }
+            ,
+            request: {
+                pageName: 'currentPage' //页码的参数名称，默认：page
+                , limitName:
+                    'pageSize' //每页数据量的参数名，默认：limit
+            }
+            ,
+            response: {
+                statusName: 'respCode' //规定数据状态的字段名称，默认：code
+                , statusCode:
+                    200 //规定成功的状态码，默认：0
+                , msgName:
+                    'message' //规定状态信息的字段名称，默认：msg
+                , countName:
+                    'totalCount' //规定数据总数的字段名称，默认：count
+                , dataName:
+                    'data' //规定数据列表的字段名称，默认：data
+            }
+        });
+
+
+        //监听事件
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            var demoTest = table.checkStatus('demoTest');
+            switch (obj.event) {
+                case 'add':
+                    layer.msg('添加');
+                    window.location.href = 'edittopic';
+
+                    break;
+                case 'delete':
+                    layer.msg('删除');
+                    break;
+                case 'update':
+                    console.log(demoTest);
+                    layer.msg('编辑');
+                    window.location.href = 'updatetopic?topicId=' + demoTest.data[0].topicId;
+                    break;
+            }
+        });
+
+
+    });
+
+
+</script>
+
+<div th:include="page-header-main"></div>
+<div class="container" style="width: 80%;">
+
+    <!--<div style="clear: both;padding: 5px 10px;">-->
+    <!--<span class="layui-breadcrumb" lay-separator=" | ">-->
+    <!--<a href="privateZone">博客维护</a>-->
+    <!--<a href="bbsZone">论坛文章维护</a>-->
+    <!--</span>-->
+    <!--</div>-->
+
+
+    <!--<div style="clear: both;padding: 5px 10px;">-->
+    <!--<span class="layui-breadcrumb" lay-separator="->">-->
+    <!--<a href="privateZone">博客维护</a>-->
+    <!--<a href="bbsZone">站主博客维护</a>-->
+    <!--</span>-->
+
+    <!--</div>-->
+
+    <!--  展示基本的数据  -->
+    <div id="header_inner_show">
+
+
+    </div>
+
+
+    <div class="layui-row">
+        <div class="layui-col-md2">
+            <div th:include="private_left_tree"></div>
+        </div>
+        <div class="layui-col-md10">
+
+            <div style="padding: 5px 15px">
+            <span class="layui-breadcrumb">
+              <a href="javaScript:;">博客维护</a>
+              <a href="javaScript:;">个人文章管理</a>
+            </span>
+            </div>
+
+            <div style="padding: 15px;margin: 0px auto;">
+                <script type="text/html" id="toolbarDemo">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+                        <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>
+                        <button class="layui-btn layui-btn-sm" lay-event="update">编辑</button>
+                    </div>
+                </script>
+                <table id="demo" lay-filter="test"></table>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<div th:include="monkey"></div>
+<div style="clear: both;height: 60px;">
+
+</div>
+<div style="background-color: #8B4726" th:include="bottom">
+    <!--#8B4726-->
+</div>
+</body>
+</html>

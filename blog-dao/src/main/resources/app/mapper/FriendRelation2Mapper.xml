@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.android.app.dao.FriendRelation2Mapper">
+
+  <resultMap id="resultMap" type="com.android.app.dto.FriendRelationShipDto">
+    <result column="nick_name" property="nickName"/>
+    <result column="sadada" property="friendImage"/>
+    <result column="u_id" property="userkey"/>
+    <result column="gmt_create" property="relationDate"/>
+  </resultMap>
+
+  <sql id="selectitems">
+    user_table.nick_name,"sadada",user_table.u_id,friend_relation.gmt_create
+  </sql>
+  <!--   查询用户的朋友的关系  -->
+  <select id="getAllFriendByUserKey" resultMap="resultMap">
+    select distinct
+    <include refid="selectitems"/>
+    from friend_relation,user_table
+    where friend_relation.user_from=#{userKey}
+    and user_table.u_id=friend_relation.user_to
+    union
+    select distinct
+    <include refid="selectitems"/>
+    from friend_relation,user_table
+    where friend_relation.user_to=#{userKey}
+    and user_table.u_id=friend_relation.user_from
+  </select>
+
+
+
+</mapper>

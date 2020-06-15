@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://v3.bootcss.com/examples/carousel/#about -->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="headerlink2">
+</head>
+<body style="background-color: #c2c2c2;">
+<!--日常杂论的首页   -->
+<script type="text/javascript">
+    $(function () {
+        debugger;
+
+
+        /**
+         * 启动小熊
+         */
+        flowjs();
+
+    });
+</script>
+
+<div th:include="page-header-main"></div>
+<div class="container">
+
+    <!--  展示基本的数据  -->
+    <div id="header_inner_show">
+
+        <div class="container">
+            <div class="navbar-inner">
+                <h4>&gt;&gt;&gt;更新文章：</h4>
+                <table class="table">
+                    <tr>
+                        <td class="text-center" width="15%"><span>文章编号：</span></td>
+                        <td class="text-center" width="84%">
+                            <input type="text" style="width: 100%" id="topicId"
+                                   name="topicname" th:value="${topicId}" disabled="disabled"/></td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" width="15%"><span>文章标题：</span></td>
+                        <td class="text-center" width="84%"><input type="text" style="width: 100%" id="topicname"
+                                                                   name="topicname"/></td>
+                    </tr>
+
+                    <tr>
+                        <td class="text-center">文章描述:</td>
+                        <td class="text-center"><input type="text" style="width: 100%" name="topicdescription"
+                                                       id="topicdescription"/></td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">文章内容：</td>
+                        <td class="text-center">
+                    <textarea name="topiccontent" id="topiccontent" cols="100" rows="8"
+                              style="width:100%;height:500px;visibility:hidden;"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">文章分类：</td>
+                        <td class="text-center">
+                            <div class="btn-group" style="float: left;width: 10%">
+                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                                    请选择分类
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="javascript:void(0);">Java</a></li>
+                                    <li><a href="javascript:void(0);">JavaScript</a></li>
+                                    <li><a href="javascript:void(0);">Spring</a></li>
+                                    <li><a href="javascript:void(0);">Mybatis</a></li>
+                                    <li><a href="javascript:void(0);">Struts2</a></li>
+                                    <li><a href="javascript:void(0);">Hibernate</a></li>
+                                    <li><a href="javascript:void(0);">Other</a></li>
+                                </ul>
+                            </div>
+                            <div style="float: right;width: 86%;padding:0px 0px 0px 0px;">
+                                <input type="text" id="catagory" name="catagory" disabled="disabled"
+                                       style="width: 100%"/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" colspan="2"><span class="btn btn-primary btn-block" id="submit_report_update">更新文章</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <script>
+                $(function () {
+                    init();
+                });
+            </script>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true" hidden="hidden" style="margin: 0px auto">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">消息提示：</h4>
+                    </div>
+                    <div class="modal-body" id="modal-body-msg" style="color: red;">
+
+                        Body goes here...
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button btn-danger" class="close" data-dismiss="modal" aria-hidden="true"> Ok
+                        </button>
+                        <!-- <button class="btn btn-danger" type="button"></button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a class="btn btn-danger" style="display:none" data-toggle="modal" id="modal_button" href="#myModal3">
+            Alert !
+        </a>
+
+
+    </div>
+</div>
+
+
+<div class="shape circle"></div>
+<div class="shape circle"></div>
+<div class="shape circle"></div>
+<div class="shape rectangle"></div>
+<div class="shape triangle"></div>
+
+<div th:include="monkey"></div>
+<div style="clear: both;height: 300px;">
+
+</div>
+<div  style="background-color: #8B4726" th:include="bottom">
+    <!--#8B4726-->
+</div>
+</body>
+</html>

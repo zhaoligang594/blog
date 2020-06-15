@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://v3.bootcss.com/examples/carousel/#about -->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="headerlink">
+</head>
+<body style="background-color: #faf8fb;">
+<!--日常杂论的首页   -->
+<script type="text/javascript">
+    $(function () {
+        /**
+         * 启动小熊
+         */
+        flowjs();
+
+        var date = new Date();
+
+        var dateString = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+
+        function addScriptTag(src) {
+            var script = document.createElement('script');
+            script.setAttribute("type", "text/javascript");
+            script.src = src;
+            document.body.appendChild(script);
+        }
+
+        addScriptTag('https://blog.breakpoint.vip/proxyonesay/dsapi/?callback=foo&date=' + dateString);
+
+        /**
+         * 播放音乐
+         */
+        $("#id_time_link_about_daily_tart").click(function () {
+            debugger;
+            $("#img_timeline_daily").show();
+            var player = $("#time_link_about_daily")[0];
+            player.play();
+        });
+
+        $("#id_time_link_about_daily_abort").click(function () {
+            debugger;
+            $("#img_timeline_daily").hide();
+            var player = $("#time_link_about_daily")[0];
+            player.pause();
+        });
+
+        // layui.use(['element','layer'], function() {
+        //     var element = layui.element;
+        //     var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+        //     layer.open({
+        //         type: 1,
+        //         title: false,
+        //         closeBtn: 0,
+        //         area: '516px',
+        //         skin: 'layui-layer-nobg', //没有背景色
+        //         shadeClose: true,
+        //         content: ''
+        // });
+        // });
+
+    });
+
+
+    function foo(data) {
+
+        var htmlStr = '<p style="padding: 5px;">'
+            + data.content + '</p><p style="padding: 5px;">'
+            + data.note
+            + '<audio id="time_link_about_daily" src=' + data.tts + ' width=0 height=0 type=audio/mpeg loop="1" autostart="false" volume="0"></audio>'
+            + '<img id="img_timeline_daily" style="position: fixed;left: 50px;top: 100px;z-index: 12;display: none;" height="500" width="300" src="' + data.fenxiang_img + '"></img>'
+            + '</p>';
+        $("#dailyEveSay").html(htmlStr);
+        console.log('response data: ' + JSON.stringify(data));
+    };
+
+
+</script>
+
+<style>
+    .text_left p a {
+        margin: 5px;
+        padding: 5px;
+        line-height: 28px;
+        color: #6e3b1f;
+    }
+
+    .content-text {
+        padding: 10px;
+        background: #fff;
+    }
+</style>
+
+<div th:include="page-header-main"></div>
+
+
+<!--  轮播的基本操作   -->
+<div class="layui-row" style="width: 90%;max-width: 1400px;margin: 0 auto;">
+    <div class="layui-col-md8 content-text">
+
+        <div class="">
+            <!--  展示基本的数据  -->
+
+
+            <!--<div class="text-center" style="padding: 15px;">-->
+            <!--<h2 style="font-size: 24px;padding: 15px;font-weight: bold;color: rgb(42,161,252)">每日天气<small>目前仅仅是北京的天气</small></h2>-->
+            <!--<div class="text-center" id="dailyEveSay" style="font-size: 18px;color: rgb(250,87,47);margin-bottom: 38px;">-->
+            <!--</div>-->
+            <!--<div class="weather-outer">-->
+
+            <!--</div>-->
+            <!--&lt;!&ndash;<span>&ndash;&gt;-->
+            <!--&lt;!&ndash;<button class="layui-btn layui-btn-radius layui-btn-normal" id="id_time_link_about_daily_tart">播放</button>&ndash;&gt;-->
+            <!--&lt;!&ndash;<button class="layui-btn layui-btn-radius layui-btn-normal" id="id_time_link_about_daily_abort">停止</button>&ndash;&gt;-->
+            <!--&lt;!&ndash;</span>&ndash;&gt;-->
+            <!--</div>-->
+
+            <!--<hr/>-->
+
+
+            <div class="" id="header_inner_show" style="margin: 15px auto;padding: 15px;">
+                <h2 style="font-size: 24px;padding: 15px;font-weight: bold;color: rgb(42,161,252)">网站时间线</h2>
+                <ul class="layui-timeline">
+
+                    <li class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+
+                        <div class="layui-timeline-content layui-text">
+                            <h3>2020年1月</h3>
+                            <p>
+                                修改网站的已知的BUG.
+                                <br>---2020</br>
+                            </p>
+                        </div>
+                    </li>
+
+                    <li class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+
+                        <div class="layui-timeline-content layui-text">
+                            <h3>2019年</h3>
+                            <p>
+                                网站改版，改变网站的主题，修改为藏青色，增加站主笔记模块，论坛模块，淘宝优惠卷模块,系统集成markdown编辑器
+                                <br>---2019</br>
+                            </p>
+                        </div>
+                    </li>
+
+
+                    <li class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                        <div class="layui-timeline-content layui-text">
+                            <h3 class="layui-timeline-title">2018年</h3>
+                            <p>
+                                虽然网站的外表没有什么改进，但是底层的技术支持换成了spring-boot+mybatis+redis and the like
+                                <br>---2018</br>
+                            </p>
+                        </div>
+                    </li>
+
+                    <li class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                        <div class="layui-timeline-content layui-text">
+                            <h3 class="layui-timeline-title">2017年</h3>
+                            <p>
+                                网站原型搭建成功，与11月部署在阿里云服务器上
+                                <br>---2017</br>
+                            </p>
+                        </div>
+                    </li>
+
+                    <li class="layui-timeline-item">
+                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                        <div class="layui-timeline-content layui-text">
+                            <div class="layui-timeline-title">
+                                <h3 class="layui-timeline-title">lang lang ago</h3>
+                                <p>
+                                    那是一个遥远的故事，欲知详情，请联系作者！！！😄
+                                    <br>---很多年前</br>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+
+            <hr/>
+            <div class="">
+                <h2 style="font-size: 24px;padding: 15px;font-weight: bold;color: rgb(42,161,252)">博客设计图</h2>
+                <img src="http://file.breakpoint.vip/picture/microp/banner1.jpg"/>
+            </div>
+
+            <hr/>
+
+
+            <div class="text-center" style="padding: 15px;">
+                <!--<span style="font-size: 18px;color: orange;">分享一首的古诗，送给大家</span>-->
+                <h2 style="font-size: 24px;padding: 15px;font-weight: bold;color: rgb(42,161,252)">
+                    &lt;&lt;与友人书&gt;&gt;
+                    <small>顾炎武</small>
+                </h2>
+                <div style="font-size: 18px;color: rgb(21,141,136);">
+
+                    <p style="padding: 15px;">
+                        人之为学，不日进则日退。独学无友，则孤陋而难成。
+                    </p>
+                    </p>
+                    <p style="padding: 15px;">
+                        久处一方，则习染而不自觉。
+                    </p>
+                    <p style="padding: 15px;line-height: 24px;">
+                        不幸而在穷僻之域，无车马之资，犹当博学审问，古人与稽，以求其是非之所在，庶几可得十之五六。
+                    </p>
+                    <p style="padding: 15px;">
+                        若既不出户，又不读书，则是面墙之士，虽有子羔、原宪之贤，终无济于天下。
+                    <p style="padding: 15px;">
+                        子曰：“十室之邑，必有忠信如丘者焉，不如丘之好学也。”
+                    </p>
+                    <p style="padding: 15px;">
+                        夫以孔子之圣，犹须好学，今人可不勉乎？
+                    </p>
+                </div>
+            </div>
+
+
+            <!--<hr/>-->
+
+            <!--<div class="text-center">-->
+                <!--<h2 style="font-size: 24px;padding: 15px;font-weight: bold;color: rgb(42,161,252)">友情链接</h2>-->
+                <!--<div class="text_left">-->
+                    <!---->
+                <!--</div>-->
+            <!--</div>-->
+
+        </div>
+
+    </div><!--<div class="layui-col-md8">-->
+    <div class="layui-col-md4">
+        <div style="margin-left: 10px;" th:include="right-page">
+
+        </div>
+    </div>
+
+</div>
+
+
+<!--<div th:include="cartoon"></div>-->
+<!--<div class="shape circle"></div>-->
+<!--<div class="shape circle"></div>-->
+<!--<div class="shape circle"></div>-->
+<!--<div class="shape rectangle"></div>-->
+<!--<div class="shape triangle"></div>-->
+
+<div th:include="monkey"></div>
+<!--<div style="clear: both;height: 300px;">-->
+<!--&lt;!&ndash;<div style="clear: both;margin: 0px auto;width: 75%;height: 150px">&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=9opzfbzq" target="_blank">&ndash;&gt;-->
+<!--&lt;!&ndash;<img src="http://file.breakpoint.vip/picture/blog/Snip20190411_17.png"/>&ndash;&gt;-->
+<!--&lt;!&ndash;</a>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--<div class="text-center">-->
+<!--&lt;!&ndash;<h2 style="font-size: 24px;padding: 15px;font-weight: bold;color: rgb(42,161,252)">友情链接</h2>&ndash;&gt;-->
+
+<!--</div>-->
+<!--</div>-->
+<div style="background-color: #8B4726" th:include="bottom">
+    <!--#8B4726-->
+</div>
+</body>
+</html>

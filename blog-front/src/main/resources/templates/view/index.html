@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://v3.bootcss.com/examples/carousel/#about -->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>BreakPoint</title>
+</head>
+<body>
+<script>
+    var projectName = '/';
+    window.onload = function () {
+        /*$.get(projectName + "/topic/getTopic/1/2", function (returnData) {
+            debugger;
+        });*/
+    }
+</script>
+<div class="container" style="padding: 2px 2px;clear: both;">
+    <!-- Example row of columns -->
+    <div th:each="topic:${pageInfo.data}">
+
+        <div class=""
+             style="clear: both;background-image:url('http://file.breakpoint.vip/picture/blog/a3342c8b800ee22fff76b7bd45281a97.jpg');padding: 7px 25px;border-radius:10px;margin: 20px 0px;">
+            <!--<div class="" style="clear: both;background-image:url('http://file.breakpoint.vip/picture/blog/a3342c8b800ee22fff76b7bd45281a97.jpg');background-color:#ffd3d3;padding: 7px 25px;border-radius:10px;margin: 20px 0px;">-->
+            <p>编号：<span th:text="${topic.topicId}"/>&nbsp;&nbsp; 类别：<span th:text="${topic.topicCategory}"/>
+                &nbsp;&nbsp;
+                时间：<span th:text="${#dates.format(topic.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"/></p>
+            <p>标题：<a class="navbar-head_inner" href="#" role="button" th:href="@{topicinner(topicId=${topic.topicId})}">
+                <span th:text="${topic.topicTitle}"/>
+            </a>
+            </p>
+            <p>
+                描述：<a class="navbar-head_inner" href="#" role="button"
+                      th:href="@{topicinner(topicId=${topic.topicId})}">
+                <span th:text="${topic.topicDesc}"/>
+            </a>
+            </p>
+            <!-- <p style="float: right;"><a class="navbar-head_inner btn btn-default" href="#" role="button"
+                                         th:href="@{topicinner(topicId=${topic.topicId})}">View details »</a></p>-->
+        </div>
+    </div>
+
+</div> <!-- /container -->
+<div class="container" style="clear: both;">
+    <div style="clear: both;">
+        <a class="navbar-head_inner" href="#" role="button" th:href="@{index(currentPage=${pageInfo.prePage})}">
+            上一页
+        </a>
+        <a class="navbar-head_inner" href="#" role="button" th:href="@{index(currentPage=${pageInfo.nextPage})}">
+            下一页
+        </a>
+        共 <span th:text="${pageInfo.pageTotal}"/>页
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $(".navbar-head_inner").click(function () {
+            addLoading($("#header_inner_show"));
+            var url = $(this).attr("href");
+            $.get(url, function (returnData) {
+                completeLoading();
+                if (typeof(returnData) == "object") {
+                    $("#header_inner_show").html(returnData.data);
+                } else {
+                    $("#header_inner_show").html(returnData);
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="headerlink">
+</head>
+<body style="background-color: white;" data-spy="scroll">
+<!--日常杂论的首页   -->
+<script type="text/javascript">
+    $(function () {
+        debugger;
+        /**
+         * 启动小熊
+         */
+        flowjs();
+
+    });
+</script>
+
+
+<div th:include="page-header-main"></div>
+
+
+<section class="container blog" style="width: 90%;max-width: 1400px;">
+    <div class="layui-row">
+        <!-- Blog Column -->
+        <div class="layui-col-md12">
+            <!--<h1 class="page-header sidebar-title">-->
+                <!--站长笔记-->
+            <!--</h1>-->
+
+            <div class="text-center">
+                <div style="clear: both;padding: 15px;">
+                    <a class="navbar-head_inner" href="#" role="button"
+                       th:href="@{lifeTime(currentPage=${pageInfo.prePage},topicType=${pageInfo.topicType})}">
+                        上一页
+                    </a>
+                    <a class="navbar-head_inner" href="#" role="button"
+                       th:href="@{lifeTime(currentPage=${pageInfo.nextPage},topicType=${pageInfo.topicType})}">
+                        下一页
+                    </a>
+                    &nbsp;当前第<span th:text="${pageInfo.currentPage}+'页 &nbsp;共'+${pageInfo.pageTotal}+'页 &nbsp;共计'+${pageInfo.totalCount}+'篇文章'"/>
+                </div>
+            </div>
+
+            <!-- 封装数据   -->
+            <span style="font-size: 18px;color: #ff8140;width: 100%;text-align: center;" th:if="${#lists.isEmpty(pageInfo.data)}">没有更多的数据</span>
+            <div th:each="topic:${pageInfo.data}">
+
+                <!-- First Blog Post -->
+                <div class="layui-row blogu">
+                    <div class="layui-col-md4 col-md-4 ">
+                            <a href="#" target="_blank" th:href="@{topicinner2(topicId=${topic.topicId},searchTopicType='life')}">
+                                <img width="214" height="172" class="img-responsive"
+                                     th:src="${topic.photoPath}" alt="photo"></a>
+                    </div>
+
+                    <div class="layui-col-md8" style="padding: 15px;">
+
+                        <h2 class="blog-title" style="font-size: 30px;">
+                            <a href="#" style=":hover{color: green;}" target="_blank" th:href="@{topicinner2(topicId=${topic.topicId},searchTopicType='life')}"><span th:text="${topic.topicTitle}"/></a>
+                        </h2>
+
+
+                            <p style="color: grey;line-height: 18px;margin: 5px;padding: 5px;" th:text="${topic.topicDesc}"></p>
+                            <!--<i class="fa fa-calendar-o"></i> <span-->
+                                <!--th:text="'发布时间：'+${#dates.format(topic.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"/>-->
+                            <div style="font-size: 18px;">
+                                <i class="fa fa-calendar-o"></i>
+                                <span th:text="'最后更新时间：'+${#dates.format(topic.gmtModified,'yyyy-MM-dd HH:mm:ss')}+'&nbsp;&nbsp;&nbsp;阅读数量：'+${topic.seeCount}+'次'"/>
+                                <p>
+                                    <span class="comments-padding"></span>
+                                    <i class="fa fa-comment"></i> 0 comments
+                                </p>
+                            </div>
+
+                        <div th:if="${topic.type}==1">
+                            <span>zhiding</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr>
+
+            </div>
+
+
+            <div class="text-center">
+                <!--<ul class="pagination">-->
+                <!--<li class="active"><a href="#">1</a></li>-->
+                <!--<li><a href="#">2</a></li>-->
+                <!--<li><a href="#">3</a></li>-->
+                <!--<li><a href="#">4</a></li>-->
+                <!--<li><a href="#">5</a></li>-->
+                <!--<li><a href="#">Next</a></li>-->
+                <!--</ul>-->
+                <div style="clear: both;padding: 15px;">
+                    <a class="navbar-head_inner" href="#" role="button"
+                       th:href="@{lifeTime(currentPage=${pageInfo.prePage},topicType=${pageInfo.topicType})}">
+                        上一页
+                    </a>
+                    <a class="navbar-head_inner" href="#" role="button"
+                       th:href="@{lifeTime(currentPage=${pageInfo.nextPage},topicType=${pageInfo.topicType})}">
+                        下一页
+                    </a>
+                    &nbsp;当前第<span th:text="${pageInfo.currentPage}+'页 &nbsp;共'+${pageInfo.pageTotal}+'页 &nbsp;共计'+${pageInfo.totalCount}+'篇文章'"/>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+</section>
+
+
+<!--Jquery Smooth Scrolling-->
+<script>
+    $(document).ready(function () {
+        $('.custom-menu a[href^="#"], .intro-scroller .inner-link').on('click', function (e) {
+            e.preventDefault();
+
+            var target = this.hash;
+            var $target = $(target);
+
+            $('html, body').stop().animate({
+                'scrollTop': $target.offset().top
+            }, 900, 'swing', function () {
+                window.location.hash = target;
+            });
+        });
+
+        $('a.page-scroll').bind('click', function (event) {
+            var $anchor = $(this);
+            $('html, body').stop().animate({
+                scrollTop: $($anchor.attr('href')).offset().top
+            }, 1500, 'easeInOutExpo');
+            event.preventDefault();
+        });
+
+        $(".nav a").on("click", function () {
+            $(".nav").find(".active").removeClass("active");
+            $(this).parent().addClass("active");
+        });
+
+        $('body').append('<div id="toTop" class="color1"><span <i class="layui-icon layui-icon-up" style="font-size: 30px; color: white;"/></span></div>');
+        $(window).scroll(function () {
+            if ($(this).scrollTop() != 0) {
+                $('#toTop').fadeIn();
+            } else {
+                $('#toTop').fadeOut();
+            }
+        });
+        $('#toTop').click(function () {
+            $("html, body").animate({scrollTop: 0}, 700);
+            return false;
+        });
+
+    });
+</script>
+
+
+<div th:include="monkey"></div>
+
+<div style="clear: both;margin: 0px auto;width: 950px;height: 150px">
+    <a href="https://promotion.aliyun.com/ntms/act/enterprise-discount.html?userCode=9opzfbzq" target="_blank">
+        <img src="http://file.breakpoint.vip/picture/blog/950_90.jpg"/>
+    </a>
+</div>
+<div  style="background-color: rgb(55,61,65);" th:include="bottom">
+    <!--#8B4726-->
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.breakpoint.dao.LiuyanMapper">
+
+  <select id="selectLiuyanByPageInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from liuyan
+    <where>
+      <trim prefixOverrides="and" prefix="and">
+        <if test="null!=userId">
+          and user_id=#{userId}
+        </if>
+      </trim>
+    </where>
+    order by gmt_create desc
+    limit #{pageStart},#{pageSize}
+  </select>
+
+  <select id="selectLiuyanByPageInfoListPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from liuyan
+    <where>
+      <trim prefixOverrides="and" prefix="and">
+        <if test="null!=userId">
+          and user_id=#{userId}
+        </if>
+        <if test="null!=type">
+          and type=#{type}
+        </if>
+      </trim>
+    </where>
+    order by gmt_create desc
+  </select>
+
+
+
+  <update id="publishCommentById">
+    update
+    liuyan
+    set type="0"
+    where
+    id=#{id}
+  </update>
+
+
+
+  <select id="countLiuyanByPageInfo" resultType="java.lang.Integer">
+    select count(id)
+    from liuyan
+    <where>
+      <trim prefixOverrides="and" prefix="and">
+        <if test="null!=userId">
+          and user_id=#{userId}
+        </if>
+      </trim>
+    </where>
+  </select>
+</mapper>
