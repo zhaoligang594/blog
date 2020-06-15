@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 注意 plugins 在配置文件中的位置
+        properties?, settings?, typeAliases?, typeHandlers?, objectFactory?, objectWrapperFactory?, plugins?, environments?, databaseIdProvider?, mappers? -->
+    <settings>
+        <setting name="defaultExecutorType" value="BATCH"/>
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+    </settings>
+    <plugins>
+        <plugin interceptor="com.breakpoint.plugins.PagePlugin">
+            <!--  数据库的方言  -->
+            <property name="dialect" value="mysql"/>
+            <!-- 需要在分页的方法上面以这个为后缀  -->
+            <!--  因为并不是所有的查询都是需要分页的，所以得把不需要分页的区分开来 -->
+            <property name="pageSqlId" value=".*ListPage"/>
+        </plugin>
+    </plugins>
+</configuration>

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.breakpoint.dao.BlogTopicMapper">
+
+    <!--  用户昵称的一起的返回  -->
+    <resultMap id="ResultMapWithNickname" type="com.breakpoint.dto.BlogTopicDto">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="topic_id" jdbcType="BIGINT" property="topicId"/>
+        <result column="topic_title" jdbcType="VARCHAR" property="topicTitle"/>
+        <result column="topic_desc" jdbcType="VARCHAR" property="topicDesc"/>
+        <result column="topic_category" jdbcType="VARCHAR" property="topicCategory"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="photo_path" jdbcType="VARCHAR" property="photoPath"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="see_count" jdbcType="BIGINT" property="seeCount"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="nick_name" property="nickName"/>
+    </resultMap>
+
+    <resultMap id="ResultMapWithBLOBS" type="com.breakpoint.dto.BlogTopicDto" extends="ResultMapWithNickname">
+        <result column="topic_text" jdbcType="LONGVARCHAR" property="topicText"/>
+    </resultMap>
+
+
+    <sql id="otherColumn">
+        nick_name
+    </sql>
+
+    <select id="selectDtoByTopicId" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBS">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        ,
+        <include refid="otherColumn"/>
+        from blog_topic ,blog_user
+        where topic_id = #{topicId,jdbcType=INTEGER}
+        and blog_topic.user_id=blog_user.user_no
+    </select>
+
+    <select id="selectByTopicId" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from blog_topic
+        where topic_id = #{topicId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectNextTopic" resultMap="ResultMapWithNickname">
+        select
+        <include refid="Base_Column_List"/>
+        from blog_topic
+        <where>
+            gmt_modified <![CDATA[ < ]]> #{blogTopic.gmtModified}
+            and gmt_modified=(
+            select max(gmt_modified) from blog_topic where gmt_modified <![CDATA[ < ]]> #{blogTopic.gmtModified}
+            <trim prefix="and" prefixOverrides="and">
+                <if test="null!=blogTopic.searchTopicType">
+                    and topic_category=#{blogTopic.searchTopicType}
+                </if>
+                <if test="null!=blogTopic.notSearchTopicType">
+                    and topic_category!=#{blogTopic.notSearchTopicType}
+                </if>
+            </trim>
+            )
+            <trim prefix="and" prefixOverrides="and">
+                <if test="null!=blogTopic.searchTopicType">
+                    and topic_category=#{blogTopic.searchTopicType}
+                </if>
+                <if test="null!=blogTopic.notSearchTopicType">
+                    and topic_category!=#{blogTopic.notSearchTopicType}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <select id="selectPreTopic" resultMap="ResultMapWithNickname">
+        select
+        <include refid="Base_Column_List"/>
+        from blog_topic
+        <where>
+            gmt_modified <![CDATA[ > ]]> #{blogTopic.gmtModified}
+            and gmt_modified=(
+            select min(gmt_modified) from blog_topic where
+            gmt_modified <![CDATA[ > ]]> #{blogTopic.gmtModified}
+            <trim prefix="and" prefixOverrides="and">
+                <if test="null!=blogTopic.searchTopicType">
+                    and topic_category=#{blogTopic.searchTopicType}
+                </if>
+                <if test="null!=blogTopic.notSearchTopicType">
+                    and topic_category!=#{blogTopic.notSearchTopicType}
+                </if>
+            </trim>
+            )
+            <trim prefix="and" prefixOverrides="and">
+                <if test="null!=blogTopic.searchTopicType">
+                    and topic_category=#{blogTopic.searchTopicType}
+                </if>
+                <if test="null!=blogTopic.notSearchTopicType">
+                    and topic_category!=#{blogTopic.notSearchTopicType}
+                </if>
+            </trim>
+        </where>
+
+
+    </select>
+
+    <select id="selectTopicByPageInfo" resultMap="ResultMapWithNickname">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="otherColumn"/>
+
+        from blog_topic ,blog_user
+        <where>
+            blog_topic.user_id=blog_user.user_no
+            <trim prefix="and" prefixOverrides="and">
+                <if test="null!=userId">
+                    and user_id=#{userId}
+                </if>
+                <if test="null!=topicType">
+                    and topic_category=#{topicType}
+                </if>
+                <if test="null!=notTopicType">
+                    and topic_category !=#{notTopicType}
+                </if>
+            </trim>
+        </where>
+        order by gmt_modified desc
+        limit #{pageStart},#{pageSize}
+    </select>
+
+    <select id="selectTopicByPageInfoListPage" resultMap="ResultMapWithNickname">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="otherColumn"/>
+        from blog_topic ,blog_user
+        <where>
+            blog_topic.user_id=blog_user.user_no
+            <trim prefix="and" prefixOverrides="and">
+                <if test="null!=userId">
+                    and user_id=#{userId}
+                </if>
+                <if test="null!=topicType">
+                    and topic_category=#{topicType}
+                </if>
+                <if test="null!=notTopicType">
+                    and topic_category !=#{notTopicType}
+                </if>
+            </trim>
+        </where>
+        order by blog_topic.gmt_modified desc
+    </select>
+
+
+
+
+    <select id="getTop3Topic" resultMap="ResultMapWithNickname">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="otherColumn"/>
+
+        from blog_topic ,blog_user
+        <where>
+            blog_topic.user_id=blog_user.user_no
+        </where>
+        order by see_count desc
+        limit 0,6
+    </select>
+
+    <resultMap id="topicTypeDto" type="com.breakpoint.dto.TopicTypeDto">
+        <result property="topicType" column="topic_category"/>
+        <result property="countNumber" column="countNum"/>
+    </resultMap>
+
+
+    <select id="getAllTopicType" resultMap="topicTypeDto">
+        select topic_category,count(topic_id) countNum
+        from blog_topic
+        group by topic_category
+        <!--<where>-->
+            <!--<trim prefix="and" prefixOverrides="and">-->
+                <!--<if test="null!=userId">-->
+                    <!--and user_id=#{userId}-->
+                <!--</if>-->
+                <!--<if test="null!=topicType">-->
+                    <!--and topic_category=#{topicType}-->
+                <!--</if>-->
+                <!--<if test="null!=notTopicType">-->
+                    <!--and topic_category !=#{notTopicType}-->
+                <!--</if>-->
+            <!--</trim>-->
+        <!--</where>-->
+    </select>
+
+    <select id="countTopicByPageInfo" resultType="int">
+        select count(topic_id)
+        from blog_topic
+        <where>
+            <trim prefix="and" prefixOverrides="and">
+                <if test="null!=userId">
+                    and user_id=#{userId}
+                </if>
+                <if test="null!=topicType">
+                    and topic_category=#{topicType}
+                </if>
+                <if test="null!=notTopicType">
+                    and topic_category !=#{notTopicType}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <resultMap id="statisticTopic" type="com.breakpoint.dto.StatisticTopicBean">
+        <result property="name" column="topic_category"/>
+        <result property="value" column="count_id"/>
+    </resultMap>
+
+    <select id="selectTopicType" resultType="java.lang.String">
+        select
+        distinct
+        topic_category
+        from blog_topic
+    </select>
+
+    <select id="selectTopicCount" resultType="int">
+        select count(topic_id)
+        from blog_topic
+    </select>
+
+    <select id="selectTopicCountByType" resultMap="statisticTopic">
+        select count(topic_id) count_id,topic_category
+        from blog_topic
+        group by topic_category
+    </select>
+
+</mapper>

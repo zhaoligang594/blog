@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>主页</title>
+    <style>
+        div {
+            clear: both;
+            padding: 5px;
+        ;
+        }
+        #div1 {
+            width: 90%;
+            height: 100%;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #div1 img {
+            margin: 5px auto;
+            width: 80%;
+        }
+
+        p {
+            font-size: 40px;
+        }
+
+        img{
+            align-content: center;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div id="div1">
+        <p>文章标题：
+            <span th:text="${text.dyTitle}"></span>
+        </p>
+        <p>作者：
+            <span th:text="${text.nickName}"></span>
+        </p>
+        <div th:each="textItem:${textList}">
+            <div th:if="${textItem.type} eq 1">
+                <p th:text="${textItem.value}"></p>
+            </div>
+            <div th:if="${textItem.type} eq 2">
+                <img  th:src="${textItem.value}" alt=""/>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

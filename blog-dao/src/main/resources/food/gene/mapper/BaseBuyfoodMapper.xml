@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.foodsite.food.dao.BuyfoodMapper">
+
+    <select id="selectByStartAndSize" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from buyfood
+        <where>
+            <trim  prefixOverrides="and">
+                <if test="userId!=null">
+                    and
+                    u_id = #{userId,jdbcType=INTEGER}
+                </if>
+                <if test="foodType!=null">
+                    and
+                    food_type =#{foodType}
+                </if>
+            </trim>
+        </where>
+        order by gmt_update desc
+        LIMIT #{start} ,#{size}
+    </select>
+
+    <select id="selectAllCount" resultType="int">
+        select count(bf_id)
+        from buyfood
+        <where>
+            <trim  prefixOverrides="and">
+                <if test="userId!=null">
+                    and
+                    u_id = #{userId,jdbcType=INTEGER}
+                </if>
+                <if test="foodType!=null">
+                    and
+                    food_type =#{foodType}
+                </if>
+            </trim>
+        </where>
+
+    </select>
+
+</mapper>
